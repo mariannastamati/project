@@ -5,4 +5,4 @@
 **AUTHORS**  
 [Χριστίνα Διαμαντή](https://github.com/ChristinaDiam) - 1115201800046  
 [Μαριάννα Σταμάτη](https://github.com/mariannastamati) - 1115202000183  
-[Αντρέας Γιέβτοβιτς]() - 1115202000033
+[Αντρέας Γιέβτοβιτς](https://github.com/zodicx) - 1115202000033
