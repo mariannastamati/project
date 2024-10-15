@@ -25,10 +25,10 @@ vector<vector<float>> read_fvecs(const string& filename){
         vector<float> vec(dimension);  // Create a vector to save contents
         file.read(reinterpret_cast<char*>(vec.data()), dimension * sizeof(float));  // Read contents
 
-        data.push_back(vec);
+        data.push_back(vec); // Save the dimension
     }
 
-    file.close();  // Close file
+    file.close(); // Close file
 
     return data;
 }

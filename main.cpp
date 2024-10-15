@@ -3,6 +3,8 @@
 #include <iomanip>
 
 #include "readfiles.h"
+#include "VamanaIndexing.h"
+
 
 int main() {
     
@@ -25,4 +27,3 @@ int main() {
 
     return 0;
 }
-
