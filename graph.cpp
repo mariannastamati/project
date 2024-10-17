@@ -30,7 +30,7 @@ vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, in
             // Random number generator (for Rrandom neighbors of node i)
             random_device rd;
             mt19937 gen(rd());
-            uniform_int_distribution<> distr(0, R-1);   // Choose a number between 0 to R-1
+            uniform_int_distribution<> distr(0, data.size() - 1);   // Choose a number between 0 to R-1
 
             // Generate random number 
             int randomNeighbor = distr(gen);
