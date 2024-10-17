@@ -5,9 +5,11 @@
 #include <vector>
 #include <random>
 
+#include "graph.h"
+
 using namespace std;
 
 // Vamana Indexing Algorithm
-void VamanaIndexing(const vector<vector<float>>& data, int size, int R);
+vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int size, int R);
 
 #endif
