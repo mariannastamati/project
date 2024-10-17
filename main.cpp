@@ -15,5 +15,7 @@ int main() {
     // Vamana Indexing Algorithm
     VamanaIndexing(vectors, vectors.size(), 100);
 
+    //exit
     return 0;
+
 }
