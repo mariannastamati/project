@@ -1,19 +1,19 @@
 #include "VamanaIndexing.h"
-#include "graph.h"
 
 
-void VamanaIndexing(const vector<vector<float>>& data, int size, int R){ 
+vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int size, int R){ 
 
     // Create and initialize a random R-regular directed graph
-    vector<vector<edge>> RandomGraph = CreateGraph(data, size, R);
+    vector<vector<edge>> Graph = CreateGraph(data, size, R);
 
     // Print Random graph 
-    for (int i = 0; i < RandomGraph.size(); ++i) {
+    for (int i = 0; i < Graph.size(); ++i) {
         cout << "Node " << i + 1 << " -> ";
-        for (const auto& edge : RandomGraph[i]) {
+        for (const auto& edge : Graph[i]) {
             std::cout << "(" << edge.first + 1 << ", " << edge.second << ") ";
         }
         cout << endl << endl;
     }
 
+    return Graph;
 }
