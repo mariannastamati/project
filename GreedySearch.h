@@ -2,7 +2,7 @@
 #define GREEDY_SEARCH_H
 
 #include "graph.h"
-#include <unordered_set>
+#include <set>
 #include <algorithm>
 
 
