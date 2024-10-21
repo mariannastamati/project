@@ -5,6 +5,8 @@
 #include "readfiles.h"
 #include "VamanaIndexing.h"
 
+#include <cstdlib> 
+
 
 int main(){
     
@@ -13,7 +15,7 @@ int main(){
     vector<vector<float>> vectors = read_fvecs(filename);
 
     // Vamana Indexing Algorithm (Creation of Vamana Graph)
-    vector<vector<edge>> VamanaGraph = VamanaIndexing(vectors, vectors.size(), 100);
+    vector<vector<edge>> VamanaGraph = VamanaIndexing(vectors, vectors.size(), 500);
 
     return 0;
 
