@@ -62,23 +62,24 @@ vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, in
 
 
 
-// Function to find (the possible) medoid of a Graph
-void Medoid(const vector<vector<float>>& data, vector<vector<edge>>& Graph, int& s, vector<int>& sample_nodes, float& minsum){
-    
-    int curMedoid = s;      // Vriable to check if the medoid has changed (means we found a better one)
+// Function to find the medoid of a Graph
+int Medoid(const vector<vector<float>>& data, vector<vector<edge>>& Graph){
 
-    // Calculate the sum of Euclidean distance for every node of the sample nodes with the other nodes of the graph
-    for (int i=0; i<sample_nodes.size(); i++){
+    int medoid = -1;            // Variable to keep medoid
+    float minsum = INFINITY;    // Variable to check for a smaller sum
+
+    // Calculate the sum of Euclidean distance for every node of the graph with the other nodes
+    for (int i=0; i<Graph.size(); i++){
         
         float sum = 0.0;
 
         for(int j=0; j< Graph.size(); j++){
 
-            if(sample_nodes[i] != j){   // If the nodes are not the same, calculate Euclidean distance
+            if(i != j){   // If the nodes are not the same, calculate Euclidean distance
 
-                // If j belongs to the neighbors of sample_nodes[i], just add the distance to sum and continue to next
+                // If j belongs to the neighbors of i, just add the distance to sum and continue to next
                 bool flag = 0;
-                for (const auto& edge : Graph[sample_nodes[i]]){
+                for (const auto& edge : Graph[i]){
                     if (edge.first == j){
 
                         sum = sum + edge.second;
@@ -88,33 +89,18 @@ void Medoid(const vector<vector<float>>& data, vector<vector<edge>>& Graph, int&
 
                 // If j does not belong to the neighbors, calculate Euclidean distance and add it to sum
                 if (flag == 0){
-                    sum = sum + EuclideanDistance(data[sample_nodes[i]],data[j]);
+                    sum = sum + EuclideanDistance(data[i],data[j]);
                 }
             }
         }
 
-        // Check if a better medoid (s) is found
+        // Check if a smaller sum is found and keep the new medoid
         if(sum < minsum){
 
             minsum = sum;
-            s = sample_nodes[i];          // "sample_nodes[i]" node is the medoid (or better medoid)
-            cout << "found better medoid " << s << endl;
+            medoid = i;          // "i" node is the medoid
+            cout << "found better medoid " << medoid << endl;
         }
     }
-
-    // If a new medoid is found, search if there is a better medoid in the neighbors of s
-    if (s != curMedoid){
-
-        // Add neighbors of s in a list and search for a "better" medoid
-        vector<int> neighbors;
-        for (const auto& edge : Graph[s]) {
-            neighbors.push_back(edge.first); 
-        }
-
-        // Recursion to check for a new medoid
-        Medoid(data, Graph, s, neighbors, minsum);
-    }
-
-    // No "better" medoid found, return
-    return;
+    return medoid;
 }
