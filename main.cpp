@@ -5,8 +5,6 @@
 #include "readfiles.h"
 #include "VamanaIndexing.h"
 
-#include <cstdlib> 
-
 
 int main(){
     
