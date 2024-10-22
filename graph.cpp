@@ -99,8 +99,8 @@ int Medoid(const vector<vector<float>>& data, vector<vector<edge>>& Graph){
 
             minsum = sum;
             medoid = i;          // "i" node is the medoid
-            cout << "found better medoid " << medoid << endl;
         }
     }
+    cout << "Medoid of the Graph: " << medoid << endl;
     return medoid;
 }
