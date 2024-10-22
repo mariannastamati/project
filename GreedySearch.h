@@ -10,6 +10,5 @@ using namespace std;
 
 
 // Greedy algorithm
-vector<int> GreedySearch(const vector<vector<edge>>& graph, int start_id, const vector<float>& query, int k, int L);
-
+vector<int> GreedySearch(const vector<vector<edge>>& graph, const vector<float>& query, const vector<vector<float>>& vectors, int start_node, int k, int L);
 #endif // GREEDY_SEARCH_H 
