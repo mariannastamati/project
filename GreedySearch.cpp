@@ -14,8 +14,7 @@ bool compare(int a, int b, const vector<float>& query, const vector<vector<float
 }
 
 // Greedy Search 
-vector<int> GreedySearch(const vector<vector<edge>>& graph, const vector<float>& query, const vector<vector<float>>& vectors, int start_node, int k, int L){
-
+pair<vector<int>, set<int>> GreedySearch(const vector<vector<edge>>& graph, const vector<float>& query, const vector<vector<float>>& vectors, int start_node, int k, int L) {
 
     set<int> visited;                 // Set for the nodes we have visited
     vector<int> result_set;           // Result set 
@@ -23,8 +22,7 @@ vector<int> GreedySearch(const vector<vector<edge>>& graph, const vector<float>&
     
     visited.insert(start_node);       
 
-
-       // Sorting the search list based on the distance from the query
+    // Sorting the search list based on the distance from the query
     sort(search_list.begin(), search_list.end(), [&](int a, int b) {
         return compare(a, b, query, vectors);  
     });
@@ -54,7 +52,7 @@ vector<int> GreedySearch(const vector<vector<edge>>& graph, const vector<float>&
                 // Insert the new node in priority_queue to keep only the k closest nodes
                 pq.push(neighbor_node);
 
-                // Keep only the k best
+                // Keep only the L best
                 if (pq.size() > L) {
                     pq.pop();
                 }
@@ -74,7 +72,5 @@ vector<int> GreedySearch(const vector<vector<edge>>& graph, const vector<float>&
         result_set.resize(k);
     }
 
-    return result_set;
-
-
+    return make_pair(result_set, visited);  // Return the result set and the visited set
 }
