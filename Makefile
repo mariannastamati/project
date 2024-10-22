@@ -3,7 +3,7 @@ CXX = g++
 CXXFLAGS = -Wall -std=c++11
 
 # Source files
-SRCS = main.cpp graph.cpp readfiles.cpp VamanaIndexing.cpp robustPrune.cpp printGraph.cpp
+SRCS = main.cpp graph.cpp readfiles.cpp VamanaIndexing.cpp robustPrune.cpp printGraph.cpp GreedySearch.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)
