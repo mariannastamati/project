@@ -94,7 +94,7 @@ int Medoid(const vector<vector<float>>& data, vector<vector<edge>>& Graph){
             }
         }
 
-        // Check if a smaller sum is found and keep the new medoid
+        // Check if a smaller sum is found and keep the new medoid of graph
         if(sum < minsum){
 
             minsum = sum;
