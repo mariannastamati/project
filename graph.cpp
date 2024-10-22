@@ -55,7 +55,7 @@ vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, in
                 // Add neighbor and distance
                 Graph[i].emplace_back(randomNeighbor, distance);
                 
-                // Increase the in-degree number of the choosen neghbor
+                // Increase the in-degree number of the choosen neighbor
                 in_degree[randomNeighbor]++;
 
             }else{
