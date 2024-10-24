@@ -1,7 +1,8 @@
 #include "printGraph.h"
 
 void PrintGraph(const std::vector<std::vector<edge>>& graph) {
-    for (int i = 0; i < graph.size(); ++i) {
+    int size = graph.size();
+    for (int i = 0; i < size; ++i) {
         std::cout << "Node " << i << ": ";
         for (const auto& e : graph[i]) {
             std::cout << "(" << e.first << ", " << e.second << ") ";

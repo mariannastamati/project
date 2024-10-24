@@ -2,27 +2,27 @@
 
 
 vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, int R){ 
-    cout <<"Graph creation"<<endl;
+
     // Create and initialize a random R-regular directed graph
     vector<vector<edge>> Graph = CreateGraph(data, data.size(), R);
 
     // Find Medoid on Graph
     //int s = Medoid(data, Graph);
     int s = 8736;
-    cout << "sigma creation" <<endl;
+
     // Sigma (σ) is a random permutation of points 1..n (data size = n = the points in the dataset)
     vector<int> sigma = random_permutation(data);
 
     int size = data.size();
     for(int i = 0; i < size; i++){
-
+        
         // Call Greedy Search giving arguments: x_0σ(i), s = medoid, k = 1 and L
         auto [result_set, visited_nodes] = GreedySearch(Graph, data[sigma[i]], data, s, 1, L);
 
         // Call Robust Prune to update out-neighbors of σ[i] (sigma[i])
         float a = 1.0;                       // Distance threshold a >= 1
         vector<int> V = result_set;          // Nearest Neighbors of sigma[i]
-        cout << "call robust first loop"<< endl;
+
         Graph = RobustPrune(sigma[i], V, a, R, Graph);
 
         // For every Nearest Neighbor j of sigma[i]
@@ -54,7 +54,6 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
                 Graph[NearNeighbor].emplace_back(sigma[i], distance);
             }
         }
-        cout << "endl inner loop" << endl;
     }
     return Graph;
 }
