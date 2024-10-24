@@ -1,4 +1,5 @@
 #include "VamanaIndexing.h"
+#include "printGraph.h"
 
 
 vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, int R){ 
@@ -7,15 +8,15 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
     vector<vector<edge>> Graph = CreateGraph(data, data.size(), R);
 
     // Find Medoid on Graph
-    //int s = Medoid(data, Graph);
-    int s = 8736;
+    int s = Medoid(data, Graph);
+    //int s = 8736;
 
     // Sigma (σ) is a random permutation of points 1..n (data size = n = the points in the dataset)
     vector<int> sigma = random_permutation(data);
 
     int size = data.size();
     for(int i = 0; i < size; i++){
-        cout << "node: "<< i<<endl;
+        
         // Call Greedy Search giving arguments: x_0σ(i), s = medoid, k = 1 and L
         auto [result_set, visited_nodes] = GreedySearch(Graph, data[sigma[i]], data, s, 1, L);
 
