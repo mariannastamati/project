@@ -15,8 +15,8 @@ int main(){
     string filename = "../datasets/siftsmall/siftsmall_base.fvecs";
     vector<vector<float>> vectors = read_fvecs(filename);
 
-    int L = 15;
-    int R = 50;   // Number of neighbors per node
+    int L = 50;
+    int R = 4;   // Number of neighbors per node
 
     // Vamana Indexing Algorithm (Creation of Vamana Graph)
     vector<vector<edge>> VamanaGraph = VamanaIndexing(vectors, L, R);

@@ -29,7 +29,7 @@ vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, in
 
     // For every node of the graph connect R random neighbors
     for (int i = 0; i < size; ++i){
-
+        
         set<int> selectedNeighbors; // Create a set to keep selected neighbors (to check for duplicates)
 
         for (int j = 0; j < R; ++j){
