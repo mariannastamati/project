@@ -66,7 +66,7 @@ vector<int> random_permutation(const vector<vector<float>>& data){
     vector<int> s(data.size());
 
     int size = data.size();
-    for(int i = 0; i <= size; ++i){
+    for(int i = 0; i < size; ++i){
         s[i] = i;
     }
 
