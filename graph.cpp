@@ -28,11 +28,11 @@ vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, in
     vector<int> in_degree(size, 0);
 
     // For every node of the graph connect R random neighbors
-    for (size_t i = 0; i < size; ++i){
+    for (int i = 0; i < size; ++i){
 
         set<int> selectedNeighbors; // Create a set to keep selected neighbors (to check for duplicates)
 
-        for (size_t j = 0; j < R; ++j){
+        for (int j = 0; j < R; ++j){
 
             // Random number generator (for Rrandom neighbors of node i)
             random_device rd;
@@ -75,11 +75,12 @@ int Medoid(const vector<vector<float>>& data, vector<vector<edge>>& Graph){
     float minsum = INFINITY;    // Variable to check for a smaller sum
 
     // Calculate the sum of Euclidean distance for every node of the graph with the other nodes
-    for (int i=0; i<Graph.size(); i++){
+    int size = Graph.size();
+    for (int i=0; i < size; i++){
         
         float sum = 0.0;
 
-        for(int j=0; j< Graph.size(); j++){
+        for(int j=0; j < size; j++){
 
             if(i != j){   // If the nodes are not the same, calculate Euclidean distance
 

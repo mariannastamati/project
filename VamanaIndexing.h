@@ -5,11 +5,13 @@
 #include <vector>
 
 #include "graph.h"
+#include "GreedySearch.h"
+#include "robustPrune.h"
 
 using namespace std;
 
 // Vamana Indexing Algorithm
-vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int size, int R);
+vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, int R);
 
 // Function to return sigma (σ), is a random permutation of points 1..n
 vector<int> random_permutation(const vector<vector<float>>& data);
