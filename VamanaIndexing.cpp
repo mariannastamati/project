@@ -1,5 +1,4 @@
 #include "VamanaIndexing.h"
-#include "printGraph.h"
 
 
 vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, int R){ 
