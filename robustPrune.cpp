@@ -20,6 +20,22 @@ std::vector<std::vector<edge>> RobustPrune(int p, std::vector<int>& V, float a, 
 
         // Find the closest neighbor in V using the precomputed distance in graph[p]
         for (int v : V) {
+
+
+            // graph[p] = μια λίστα από τους γείτονες του p
+            // πρέπει να κάνω αναζήτηση του v μέσα στο graph[p]
+            /*vector<edge> &neighbors = graph[p];
+            long unsigned int j;
+            float dist = 0.0;
+            for(j = 0; j < neighbors.size(); j++)
+            {
+                if(v == graph[p][j].first)
+                {
+                    dist = graph[p][j].second;
+                    break;
+                }
+            }*/
+
             float dist = graph[p][v].second;  // Use precomputed distance from graph
             if (dist < min_dist) {
                 min_dist = dist;
