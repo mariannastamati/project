@@ -13,7 +13,7 @@ using namespace std;
 using edge = pair<int, float>;
 
 // robustPrune.h
-std::vector<std::vector<edge>> RobustPrune(int p, std::vector<int>& V, float a, int R, std::vector<std::vector<edge>>& graph);
+std::vector<std::vector<edge>> RobustPrune(int p, std::vector<int>& V, float a, int R, std::vector<std::vector<edge>>& graph, const std::vector<std::vector<float>>& data);
 
 
 vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, int R);
