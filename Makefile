@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -g3 -O3 -Wall -std=c++11
+CXXFLAGS = -g3 -O3 -Wall -std=c++17
 
 # Source files
 SRCS = $(wildcard *.cpp)

@@ -53,7 +53,8 @@ pair<vector<int>, set<int>> GreedySearch(const vector<vector<edge>>& graph, cons
                 pq.push(neighbor_node);
 
                 // Keep only the L best
-                if (pq.size() > L) {
+                int pq_size = pq.size();
+                if (pq_size > L) {
                     pq.pop();
                 }
             }
@@ -68,7 +69,8 @@ pair<vector<int>, set<int>> GreedySearch(const vector<vector<edge>>& graph, cons
 
     // We keep only the k closest nodes and return them
     sort(result_set.begin(), result_set.end(), comp);
-    if (result_set.size() > k) {
+    int r_set = result_set.size();
+    if (r_set > k) {
         result_set.resize(k);
     }
 
