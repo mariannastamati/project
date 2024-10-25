@@ -8,7 +8,6 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
 
     // Find Medoid on Graph
     int s = Medoid(data, Graph);
-    //int s = 8736;
 
     // Sigma (σ) is a random permutation of points 1..n (data size = n = the points in the dataset)
     vector<int> sigma = random_permutation(data);
@@ -31,9 +30,24 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
 
             int NearNeighbor = V[j];
 
-            // If the number of Nearest Neighbors j with sigma[i] (an extra neighbor) is greater that R
             int NNsize = Graph[NearNeighbor].size();
-            if ( NNsize + 1 > R){
+
+            // Checking if sigma[i] already exists in the Nearest Neighbor j
+            bool exists = false;
+            for(int k = 0; k < NNsize; k++)
+            {
+                if(Graph[NearNeighbor][k].first == sigma[i])
+                {
+                    exists = true;
+                    break;
+                }
+            }
+
+            // If exists set "extra" to 0
+            int extra = (exists == true) ? 0 : 1;
+
+            // If the number of Nearest Neighbors j with sigma[i] (an extra neighbor) is greater that R
+            if ( NNsize + extra > R){
 
                 // Create a vector with all the neighbors of the NearNeighbor (V[j])
                 vector<int> neighbors(Graph[NearNeighbor].size());
@@ -42,16 +56,20 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
                 }
                 
                 // Add sigma[i] to the neighbors
-                neighbors.push_back(sigma[i]);
-
+                if(exists == false){
+                    neighbors.push_back(sigma[i]);
+                }
+            
                 // Call Robust Prune to update out-neighbors of NearNeighbor (V[j])
                 Graph = RobustPrune(NearNeighbor, neighbors, a, R, Graph, data);
 
             }else{
-                // Else add sigma[i] in the neighbors of NearNeighbor (V[j]) without pruning
-                float distance = EuclideanDistance(data[NearNeighbor],data[sigma[i]]);
+                // Else (if it doesn't already exists) add sigma[i] in the neighbors of NearNeighbor (V[j]) without pruning
+                if(exists == false){
 
-                Graph[NearNeighbor].emplace_back(sigma[i], distance);
+                    float distance = EuclideanDistance(data[NearNeighbor],data[sigma[i]]);
+                    Graph[NearNeighbor].emplace_back(sigma[i], distance);
+                } 
             }
         }
     }
