@@ -23,7 +23,7 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
         float a = 1.0;                       // Distance threshold a >= 1
         vector<int> V = result_set;          // Nearest Neighbors of sigma[i]
 
-        Graph = RobustPrune(sigma[i], V, a, R, Graph);
+        Graph = RobustPrune(sigma[i], V, a, R, Graph, data);
 
         // For every Nearest Neighbor j of sigma[i]
         int Vsize = V.size();
@@ -45,7 +45,7 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
                 neighbors.push_back(sigma[i]);
 
                 // Call Robust Prune to update out-neighbors of NearNeighbor (V[j])
-                Graph = RobustPrune(NearNeighbor, neighbors, a, R, Graph);
+                Graph = RobustPrune(NearNeighbor, neighbors, a, R, Graph, data);
 
             }else{
                 // Else add sigma[i] in the neighbors of NearNeighbor (V[j]) without pruning
