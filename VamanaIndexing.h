@@ -11,7 +11,7 @@
 using namespace std;
 
 // Vamana Indexing Algorithm
-vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, int R);
+vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, int R, int& s);
 
 // Function to return sigma (σ), is a random permutation of points 1..n
 vector<int> random_permutation(const vector<vector<float>>& data);

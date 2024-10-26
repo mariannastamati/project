@@ -7,15 +7,11 @@
 #include <vector>
 #include <string>
 
-using namespace std;
+#include "graph.h"
 
-// Create edge of graph (int: neighbor and float: distance)
-using edge = pair<int, float>;
+using namespace std;
 
 // robustPrune.h
 std::vector<std::vector<edge>> RobustPrune(int p, std::vector<int>& V, float a, int R, std::vector<std::vector<edge>>& graph, const std::vector<std::vector<float>>& data);
-
-
-vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, int R);
 
 #endif
