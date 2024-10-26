@@ -11,8 +11,9 @@
 using namespace std;
 
 
-/* Graph main idea: the final graph will be represented by an adjacency list where every neighbor has a pair with the node
-and the distance (Euclidean distance). 
+/* Graph main idea: the final graph will be represented by an adjacency list, where every neighbor is represented by a pair 
+containing the node number and the distance (Euclidean distance). Also every node has only R out-degrees (neighbors) 
+and only <= R in-degrees.
 
 size: the number of nodes in graph
 R: the number of random neighbors in every node

@@ -19,6 +19,7 @@ int main(){
     string query_data = "../datasets/siftsmall/siftsmall_query.fvecs";
     vector<vector<float>> queries = read_fvecs(query_data);
 
+    int k = 3;          // Number of nearest neighbors to find
     int L = 50;
     int R = 4;          // Number of neighbors per node
     int medoid = -1;    // The medoid of graph
@@ -29,28 +30,30 @@ int main(){
     PrintGraph(VamanaGraph);
 
 
-    // παραδείγματα τιμών για τον Greedy
-    //  int start_node = 8736;                 
-    //  int k = 10;                                                       
-    //vector<float> query = vectors[start_node];  // Query point
+    // Greedy Search for every query point of the "Query Dataset"          
+    int queries_size = queries.size(); 
+    for(int i = 0; i < queries_size; i++){
 
-    // Εκτέλεση Greedy Search
-    // auto [result_set, visited_nodes] = GreedySearch(VamanaGraph, query, vectors, start_node, k, L);
+        vector<float> query = queries[i];     // Query point
+
+        // auto [result_set, visited_nodes] = GreedySearch(VamanaGraph, query, vectors, medoid, k, L);
 
 
-    // Εκτύπωση αποτελεσμάτων Greedy 
-    //  cout << "K nearest nodes: ";
-    // for (int node : result_set) {
-    //     cout << node << " ";
-    // }
-    //  cout << endl;
+        // Εκτύπωση αποτελεσμάτων Greedy 
+        //  cout << "K nearest nodes: ";
+        // for (int node : result_set) {
+        //     cout << node << " ";
+        // }
+        //  cout << endl;
 
-    // Εκτύπωση των επισκεφθέντων κόμβων Greedy
-    // cout << "Visited nodes: ";
-    //  for (int node : visited_nodes) {
-    //      cout << node << " ";
-    //   }
-    //    cout << endl;
+        // Εκτύπωση των επισκεφθέντων κόμβων Greedy
+        // cout << "Visited nodes: ";
+        //  for (int node : visited_nodes) {
+        //      cout << node << " ";
+        //   }
+        //    cout << endl;
+    }                                                     
+    
 
     return 0;
 }
