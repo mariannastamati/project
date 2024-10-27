@@ -23,13 +23,13 @@ R: the number of random neighbors in every node
 using edge = pair<int, float>;
 
 // Function to calculate Euclidean Distance
-float EuclideanDistance(const vector<float>& node1, const vector<float>& node2);
+double EuclideanDistance(const vector<float>& node1, const vector<float>& node2);
 
 // Creates a random R-regular directed graph
 vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, int R);
 
 // Function to find medoid of a Graph (Brute Force)
-int Medoid(const vector<vector<float>>& data, vector<vector<edge>>& Graph);
+int Medoid(const vector<vector<float>>& data);
 
 
 #endif

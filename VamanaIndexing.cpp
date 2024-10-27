@@ -7,7 +7,7 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
     vector<vector<edge>> Graph = CreateGraph(data, data.size(), R);
 
     // Find Medoid on Graph
-    s = Medoid(data, Graph);
+    s = Medoid(data);
 
     // Sigma (σ) is a random permutation of points 1..n (data size = n = the points in the dataset)
     vector<int> sigma = random_permutation(data);

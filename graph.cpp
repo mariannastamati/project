@@ -2,17 +2,21 @@
 
 
 // Function to calculate Euclidean Distance
-float EuclideanDistance(const vector<float>& node1, const vector<float>& node2){
+double EuclideanDistance(const vector<float>& node1, const vector<float>& node2){
 
-    float sum = 0.0;
+    if (node1.size() != node2.size()) {
+        throw invalid_argument("Vectors have different size.");
+    }
 
-    for (size_t i = 0; i < node1.size(); ++i) {
-        sum = sum + pow(node2[i] - node1[i], 2);
+    double sum = 0.0;
+
+    for (size_t i = 0; i < node1.size(); ++i){
+
+        double diff = node2[i] - node1[i];
+        sum = sum + (diff * diff);
     }
     
-    float Euclidean = sqrt(sum);
-
-    // Return Euclidean Distance
+    double Euclidean = sqrt(sum);
     return Euclidean;
 } 
 
@@ -69,35 +73,21 @@ vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, in
 
 
 // Function to find the medoid of a Graph
-int Medoid(const vector<vector<float>>& data, vector<vector<edge>>& Graph){
+int Medoid(const vector<vector<float>>& data){
 
     int medoid = -1;            // Variable to keep medoid
-    float minsum = INFINITY;    // Variable to check for a smaller sum
+    double minsum = INFINITY;    // Variable to check for a smaller sum
 
     // Calculate the sum of Euclidean distance for every node of the graph with the other nodes
-    int size = Graph.size();
+    int size = data.size();
     for (int i=0; i < size; i++){
         
-        float sum = 0.0;
+        double sum = 0.0;
 
         for(int j=0; j < size; j++){
-
             if(i != j){   // If the nodes are not the same, calculate Euclidean distance
-
-                // If j belongs to the neighbors of i, just add the distance to sum and continue to next
-                bool flag = 0;
-                for (const auto& edge : Graph[i]){
-                    if (edge.first == j){
-
-                        sum = sum + edge.second;
-                        flag = 1;
-                    }
-                }
-
-                // If j does not belong to the neighbors, calculate Euclidean distance and add it to sum
-                if (flag == 0){
-                    sum = sum + EuclideanDistance(data[i],data[j]);
-                }
+                
+                sum = sum + EuclideanDistance(data[i],data[j]);
             }
         }
 
