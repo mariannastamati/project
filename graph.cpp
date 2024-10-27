@@ -12,8 +12,8 @@ float EuclideanDistance(const vector<float>& node1, const vector<float>& node2){
     
     float Euclidean = sqrt(sum);
 
-    // Return Euclidean Distance but keep only one decimal
-    return round(Euclidean * 10) / 10;
+    // Return Euclidean Distance
+    return Euclidean;
 } 
 
 
