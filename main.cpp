@@ -19,6 +19,10 @@ int main(){
     string query_data = "../datasets/siftsmall/siftsmall_query.fvecs";
     vector<vector<float>> queries = read_fvecs(query_data);
 
+    // Reading groundtruth files
+    string groundtruth_data = "../datasets/siftsmall/siftsmall_groundtruth.ivecs";
+    vector<vector<int>> groundtruth = read_ivecs(groundtruth_data);
+
     int k = 3;          // Number of nearest neighbors to find
     int L = 50;
     int R = 4;          // Number of neighbors per node

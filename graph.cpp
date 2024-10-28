@@ -9,13 +9,13 @@ double EuclideanDistance(const vector<float>& node1, const vector<float>& node2)
     }
 
     double sum = 0.0;
+    int size = node1.size();
+    for (int i = 0; i < size; ++i){
 
-    for (size_t i = 0; i < node1.size(); ++i){
-
-        double diff = node2[i] - node1[i];
-        sum = sum + (diff * diff);
+        double diff = (node1[i] - node2[i])*(node1[i] - node2[i]);
+        sum = sum + diff;
     }
-    
+   
     double Euclidean = sqrt(sum);
     return Euclidean;
 } 
