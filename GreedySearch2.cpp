@@ -1,4 +1,4 @@
-#include "GreedySearch2.h"
+#include "GreedySearch.h"
 
 
 // Function to remove common elements
