@@ -19,7 +19,7 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
         auto [result_set, visited_nodes] = GreedySearch(s, data[sigma[i]], 1, L, data, Graph);
         
         // Call Robust Prune to update out-neighbors of σ[i] (sigma[i])
-        float a = 1.0;                       // Distance threshold a >= 1
+        float a = 2.0;                       // Distance threshold a >= 1
         vector<int> V = result_set;          // Nearest Neighbors of sigma[i]
 
         Graph = RobustPrune(sigma[i], V, a, R, Graph, data);
