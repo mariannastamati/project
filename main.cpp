@@ -40,22 +40,22 @@ int main(){
 
         vector<float> query = queries[i];     // Query point
 
-        // auto [result_set, visited_nodes] = GreedySearch(VamanaGraph, query, vectors, medoid, k, L);
+        //auto [result_set, visited_nodes] = GreedySearch(medoid, query, k, L, vectors, VamanaGraph);
 
 
         // Εκτύπωση αποτελεσμάτων Greedy 
-        //  cout << "K nearest nodes: ";
+        // cout << "K nearest nodes: ";
         // for (int node : result_set) {
         //     cout << node << " ";
         // }
-        //  cout << endl;
+        // cout << endl;
 
         // Εκτύπωση των επισκεφθέντων κόμβων Greedy
         // cout << "Visited nodes: ";
-        //  for (int node : visited_nodes) {
-        //      cout << node << " ";
-        //   }
-        //    cout << endl;
+        // for (int node : visited_nodes) {
+        //     cout << node << " ";
+        // }
+        // cout << endl;
     }                                                     
     
 
