@@ -23,9 +23,9 @@ int main(){
     string groundtruth_data = "../datasets/siftsmall/siftsmall_groundtruth.ivecs";
     vector<vector<int>> groundtruth = read_ivecs(groundtruth_data);
 
-    int k = 3;          // Number of nearest neighbors to find
+    int k = 10;          // Number of nearest neighbors to find
     int L = 50;
-    int R = 4;          // Number of neighbors per node
+    int R = 20;          // Number of neighbors per node
     int medoid = -1;    // The medoid of graph
 
     // Vamana Indexing Algorithm (Creation of Vamana Graph)
