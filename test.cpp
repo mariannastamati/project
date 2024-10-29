@@ -84,6 +84,40 @@ void Medoid_2(){
 }
 
 
+//------------ CREATE R-DIRECTED GRAPH ------------
+/* Test 1 */
+void CreateGraph_1(){
+    
+    vector<vector<float>> points = {
+        {1.0, 2.0},
+        {2.0, 1.0},
+        {0.0, 2.0},
+        {0.0, 1.0},
+        {4.0, 6.0},
+        {0.0, 5.0},
+        {3.0, 7.0}
+    };
+
+    int size = points.size();
+    int R = 4;
+
+    vector<vector<edge>> G = CreateGraph(points, size, R);
+
+    bool flag = 0;
+    int Gsize = G.size();
+    for(int i = 0; i < Gsize; i++){
+
+        int Neighbor_size = G[i].size();
+        if(Neighbor_size != R){
+            flag = 1;           // Set flag=1 if number of neighbors is not R
+        }
+    }
+
+    // The graph must have N=points.size() nodes and every node must have R neighbors
+    TEST_ASSERT((G.size() == points.size()) && (flag == 0));
+}
+
+
 //------------ GREEDY SEARCH ALGORITHM ------------
 /* Test 1 */
 void GreedySearch_1(){
@@ -205,6 +239,9 @@ TEST_LIST = {
     // Medoid Tests
     {"Medoid 1", Medoid_1},
     {"Medoid 2", Medoid_2},
+
+    // Create Graph Tests
+    {"Create Graph 1", CreateGraph_1},
 
     // Greedy Search Tests
     {"Greedy Search 1", GreedySearch_1},
