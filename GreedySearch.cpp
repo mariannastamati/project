@@ -1,10 +1,7 @@
 #include "GreedySearch.h"
-#include "graph.h"
+
 #include <queue>
 #include <cmath>
-#include <algorithm>
-#include <vector>
-#include <set>
 
 using namespace std;
 

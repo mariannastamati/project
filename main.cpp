@@ -1,13 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#include <cstdlib>
 
 #include "readfiles.h"
 #include "printGraph.h"
 #include "VamanaIndexing.h"
-#include "GreedySearch.h"
 
-#include <cstdlib>
 
 int main(){
 

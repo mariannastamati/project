@@ -218,7 +218,7 @@ void GreedySearch_4(){
     int k = 2;
     int L = 3;
 
-    pair<vector<int>, set<int>> result =GreedySearch(G, q, points, medoid, k, L);
+    pair<vector<int>, set<int>> result = GreedySearch(G, q, points, medoid, k, L);
 
     cout << "\nGreedy search result:" << endl;
     print(result.first, result.second);
@@ -228,8 +228,8 @@ void GreedySearch_4(){
 }
 
 
-// ------------ ROBUST PRUNE TEST 5 ------------
-// Test for Robust Prune Algorithm
+// ------------ ROBUST PRUNE ALGORITHM ------------
+// Test 1
 void RobustPrune_1() {
     // Create a set of points
     vector<vector<float>> points = {
@@ -240,13 +240,13 @@ void RobustPrune_1() {
     };
 
     int medoid = 1; // Use point {1.0, 1.0} as medoid
-    vector<vector<edge>> G = CreateGraph(points, points.size(), 3); // Create initial graph
+    int R = 1; // Max out-neighbors
+    vector<vector<edge>> G = CreateGraph(points, points.size(), R); // Create initial graph
 
     // Perform Greedy Search first to get initial neighbors
     vector<int> V = {0, 2, 3}; // Candidate set containing points 0, 2, and 3
     float a = 1.5; // Pruning threshold
-    int R = 1; // Max out-neighbors
-
+    
     cout << "\nbefore:" << endl;
     PrintGraph(G); // Print the initial graph
 
@@ -270,8 +270,8 @@ void RobustPrune_1() {
     }
 }
 
-// ------------ ROBUST PRUNE TEST 6 ------------
-// Test for Robust Prune Algorithm
+
+// Test 2
 void RobustPrune_2() {
     // Create a set of points, including some that should be pruned
     vector<vector<float>> points = {
@@ -285,12 +285,12 @@ void RobustPrune_2() {
     };
 
     int medoid = 3;  // Use point {1.0, 1.0} as medoid
-    vector<vector<edge>> G = CreateGraph(points, points.size(), 3);
+    int R = 3;  // Max out-neighbors
+    vector<vector<edge>> G = CreateGraph(points, points.size(), R);
     vector<int> V = {0, 1, 2, 4, 5, 6};  // Candidate set (including outliers)
 
     float a = 1.5;  // Increase the threshold slightly to improve pruning
-    int R = 3;  // Max out-neighbors
-
+   
     cout << "\nbefore:" << endl;
     PrintGraph(G);
 
@@ -339,6 +339,7 @@ TEST_LIST = {
     {"Greedy Search 2", GreedySearch_2},
     {"Greedy Search 3", GreedySearch_3},
 
+    // Robust Prune Tests
     {"Robust Prune 1", RobustPrune_1},
     {"Robust Prune 1", RobustPrune_2},
 

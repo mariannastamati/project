@@ -1,24 +1,24 @@
 #include "robustPrune.h"
-#include <limits>
-#include <vector>
-#include <algorithm>
-#include <unordered_set>
-#include "printGraph.h"
-#include "graph.h"
 
-std::vector<std::vector<edge>> RobustPrune(int p, std::vector<int>& V, float a, int R, std::vector<std::vector<edge>>& Graph, const std::vector<std::vector<float>>& data) {
-    std::vector<int> N_out;  // Neighbors of p
+
+vector<vector<edge>> RobustPrune(int p, vector<int>& V, float a, int R, vector<vector<edge>>& Graph, const vector<vector<float>>& data) {
+    vector<int> N_out;  // Neighbors of p (To keep the final neighbors)
 
     // Create a temporary vector to store previous neighbors of p
-    std::vector<int> previous_neighbors;
+    vector<int> previous_neighbors;
 
     // Store previous neighbors before removing p from V
     for (const auto& edge : Graph[p]) {
-        previous_neighbors.push_back(edge.first);
+
+        // Check if the neighbor already exists in V
+        if (find(V.begin(), V.end(), edge.first) == V.end()){
+            previous_neighbors.push_back(edge.first);
+        }
+        
     }
 
     // Remove p from V if it exists
-    V.erase(std::remove(V.begin(), V.end(), p), V.end());
+    V.erase(remove(V.begin(), V.end(), p), V.end());
 
     // Add previous neighbors of p to V
     V.insert(V.end(), previous_neighbors.begin(), previous_neighbors.end());

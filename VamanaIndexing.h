@@ -1,9 +1,6 @@
 #ifndef VAMANAINDEXING_H
 #define VAMANAINDEXING_H
 
-#include <iostream>
-#include <vector>
-
 #include "graph.h"
 #include "GreedySearch.h"
 #include "robustPrune.h"
