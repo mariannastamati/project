@@ -13,7 +13,7 @@
 using namespace std;
 
 // Robust Prune Algorithm
-std::vector<std::vector<edge>> RobustPrune(int p, std::vector<int>& V, float a, int R, 
-    std::vector<std::vector<edge>>& graph, const std::vector<std::vector<float>>& data);
+vector<vector<edge>> RobustPrune(int p, vector<int>& V, float a, int R, 
+    vector<vector<edge>>& graph, const vector<vector<float>>& data);
 
 #endif
