@@ -16,11 +16,11 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
     for(int i = 0; i < size; i++){
 
         // Call Greedy Search giving arguments: x_0σ(i), s = medoid, k = 1 and L
-        auto [result_set, visited_nodes] = GreedySearch(s, data[sigma[i]], 1, L, data, Graph);
+        auto [K_neighbors, visited_nodes] = GreedySearch(s, data[sigma[i]], 1, L, data, Graph);
         
         // Call Robust Prune to update out-neighbors of σ[i] (sigma[i])
-        float a = 2.0;                       // Distance threshold a >= 1
-        vector<int> V = result_set;          // Nearest Neighbors of sigma[i]
+        float a = 1.0;                       // Distance threshold a >= 1
+        vector<int> V = visited_nodes;       // Visited nodes of sigma[i] from Greedy Search
 
         Graph = RobustPrune(sigma[i], V, a, R, Graph, data);
 

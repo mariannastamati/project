@@ -2,11 +2,12 @@
 
 
 // Function to remove common elements
-vector<int> removeCommonElements(const set<int>& visited, const vector<int>& search_list){
+vector<int> removeCommonElements(const vector<int>& visited, const vector<int>& neighbors_list){
     vector<int> result; //  Variable to save result
 
-    for (int num : search_list) {
-        if (visited.find(num) == visited.end()) {
+    for (int num : neighbors_list){
+
+        if (find(visited.begin(), visited.end(), num) == visited.end()) {
             // If num does not belong to visited, add to result
             result.push_back(num);
         }
@@ -16,10 +17,10 @@ vector<int> removeCommonElements(const set<int>& visited, const vector<int>& sea
 
 
 // Greedy Search Algorithm
-pair<vector<int>, set<int>> GreedySearch(int medoid, const vector<float>& query, int k, int L, const vector<vector<float>>& vectors,
+pair<vector<int>, vector<int>> GreedySearch(int medoid, const vector<float>& query, int k, int L, const vector<vector<float>>& vectors,
 const vector<vector<edge>>& graph){
 
-    set<int> visited;                 // Set for the nodes we have visited (empty)
+    vector<int> visited;              // Set for the nodes we have visited (empty)
     vector<int> List = {medoid};      // Search list which we initialize with the start node 
     
     vector<int> L_without_V = removeCommonElements(visited,List);   // L\V
@@ -51,7 +52,7 @@ const vector<vector<edge>>& graph){
         }
 
         // Update visited <- visited + p* (pstar)
-        visited.insert(pstar);
+        visited.push_back(pstar);
 
         // Checking if List_size is greater than L
         int Lsize = List.size();

@@ -7,7 +7,7 @@ vector<vector<edge>> RobustPrune(int p, vector<int>& V, float a, int R, vector<v
     // Create a temporary vector to store previous neighbors of p
     vector<int> previous_neighbors;
 
-    // Store previous neighbors before removing p from V
+    // Store previous neighbors of p
     for (const auto& edge : Graph[p]) {
 
         // Check if the neighbor already exists in V
@@ -35,43 +35,43 @@ vector<vector<edge>> RobustPrune(int p, vector<int>& V, float a, int R, vector<v
 
         // Stop if we've reached the limit
         if (N_out.size() == static_cast<size_t>(R)) {
-            //std::cout << "Reached maximum neighbors for node " << p << "." << std::endl;
             break;
         }
 
         // Remove p_star from V
-        V.erase(std::remove(V.begin(), V.end(), p_star), V.end());
-        //std::cout << "Removed node " << p_star << " from candidates." << std::endl;
-
+        V.erase(remove(V.begin(), V.end(), p_star), V.end());
+        
         // Prune V based on distance
-        V.erase(std::remove_if(V.begin(), V.end(), [&](int candidate) {
-            float dist_p_candidate = EuclideanDistance(data[p], data[candidate]);
-            float dist_p_p_star = EuclideanDistance(data[p], data[p_star]);
-            bool to_prune = dist_p_candidate > a * dist_p_p_star;
+        int vsize = V.size();
+        // For every p' in V
+        for(int i = 0; i < vsize; i++){
 
-            // Debugging output for pruning decision
-            // std::cout << "Checking candidate " << candidate << ": "
-            //           << "Distance to p: " << dist_p_candidate << ", "
-            //           << "Distance to p*: " << dist_p_p_star << ", "
-            //           << "Prune condition: " << (to_prune ? "true" : "false") << std::endl;
+            // Calculate Euclidean distance for (p*,p') and (p,p')
+            float Dist_pstar = EuclideanDistance(data[p_star], data[V[i]]);
+            float Dist_p = EuclideanDistance(data[p], data[V[i]]);
 
-            return to_prune;  // Returns true if it should be removed
-        }), V.end());
+            // If this is true then remove p' from V
+            if((a*Dist_pstar) <= Dist_p){
+
+                // Remove p' from V
+                V.erase(remove(V.begin(), V.end(), V[i]), V.end());
+            }
+        }
     }
 
     // Update the graph with the new neighbors for p
-    Graph[p].clear(); // Clear existing edges for node p
+    Graph[p].clear();               // Clear existing neighbors for node p
     for (int neighbor : N_out) {
         float distance = EuclideanDistance(data[p], data[neighbor]);
+
+        // Add new neighbors for node p in Graph
         Graph[p].emplace_back(neighbor, distance);
-        //std::cout << "Setting edge from " << p << " to " << neighbor << " with distance " << distance << "." << std::endl;
     }
 
-    // Ensure we are filling in R neighbors
-    if (N_out.size() < static_cast<size_t>(R)) {
-        std::cout << "Warning: Less than " << R << " neighbors found for node " << p << "." << std::endl;
+    // Ensure we are filling in less than R neighbors
+    if (N_out.size() > static_cast<size_t>(R)) {
+        cout << "Warning: More than " << R << " neighbors found for node " << p << ". Prune gone wrong." << endl;
     }
 
-    std::cout << "Graph updated for node " << p << "." << std::endl;
     return Graph;  // Return the updated graph
 }

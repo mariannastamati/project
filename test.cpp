@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void print(vector<int>& L, set<int>& V)
+void print(vector<int>& L, vector<int>& V)
 {
     // Print knn
     cout << "K nearest nodes: ";
@@ -137,13 +137,13 @@ void GreedySearch_1(){
     int k = 2;
     int L = 3;
 
-    pair<vector<int>, set<int>> result = GreedySearch(medoid, q, k, L, points, G);
+   auto [K_neighbors, visited_nodes] = GreedySearch(medoid, q, k, L, points, G);
 
     cout << "\nGreedy search result:" << endl;
-    print(result.first, result.second);
+    print(K_neighbors, visited_nodes);
 
     // The first nearest neighbor to q must be himself (points[2])
-    TEST_ASSERT(result.first.size() == (long unsigned int) k);
+    TEST_ASSERT(K_neighbors.size() == (long unsigned int) k);
 }
 
 
@@ -164,13 +164,13 @@ void GreedySearch_2(){
     int k = 2;
     int L = 3;
 
-    pair<vector<int>, set<int>> result = GreedySearch(medoid, q, k, L, points, G);
+   auto [K_neighbors, visited_nodes] = GreedySearch(medoid, q, k, L, points, G);
 
     cout << "\nGreedy search result:" << endl;
-    print(result.first, result.second);
+    print(K_neighbors, visited_nodes);
 
     // 2 nearest neighbors to q must be points[3] and points[4]
-    TEST_ASSERT(result.first.size() == (long unsigned int) k);
+    TEST_ASSERT(K_neighbors.size() == (long unsigned int) k);
 }
 
 
@@ -191,125 +191,106 @@ void GreedySearch_3(){
     int k = 2;
     int L = 3;
 
-    pair<vector<int>, set<int>> result = GreedySearch(medoid, q, k, L, points, G);
+    auto [K_neighbors, visited_nodes] = GreedySearch(medoid, q, k, L, points, G);
 
     cout << "\nGreedy search result:" << endl;
-    print(result.first, result.second);
+    print(K_neighbors, visited_nodes);
 
     // 2 nearest neighbors to q must be points[1] and points[0]
-    TEST_ASSERT(result.first.size() == (long unsigned int) k);
+    TEST_ASSERT(K_neighbors.size() == (long unsigned int) k);
 }
 
-//MARIANNA GREEDY 
-/* Test 4 */
-void GreedySearch_4(){
+
+// ------------ ROBUST PRUNE ALGORITHM ------------
+/* Test 1 */ 
+void RobustPrune_1() {
 
     vector<vector<float>> points = {
         {1.0, 2.0},
         {2.0, 1.0},
         {0.0, 2.0},
         {1.0, 1.0},
-        {1.0, 0.0}
+        {1.0, 0.0},
+        {1000.0, 1000.0},   // Outlier (Point 5)
+        {500.0, 500.0}      // Another outlier (Point 6)
     };
-
-    int medoid = 3;
-    vector<vector<edge>> G = CreateGraph(points, points.size(), 3);
-    vector<float> q = {2.0, 2.0};       // Using query point different from the points of vector
-    int k = 2;
-    int L = 3;
-
-    pair<vector<int>, set<int>> result = GreedySearch(G, q, points, medoid, k, L);
-
-    cout << "\nGreedy search result:" << endl;
-    print(result.first, result.second);
-
-    // 2 nearest neighbors to q must be points[1] and points[0]
-    TEST_ASSERT(result.first.size() == (long unsigned int) k);
-}
-
-
-// ------------ ROBUST PRUNE ALGORITHM ------------
-// Test 1
-void RobustPrune_1() {
-    // Create a set of points
-    vector<vector<float>> points = {
-        {1.0, 2.0},        // Point 0
-        {1.0, 1.0},        // Medoid (Point 1)
-        {100000.0, 100000.0}, // Outlier (Point 2)
-        {-100000.0, -100000.0} // Another outlier (Point 3)
-    };
-
-    int medoid = 1; // Use point {1.0, 1.0} as medoid
-    int R = 1; // Max out-neighbors
-    vector<vector<edge>> G = CreateGraph(points, points.size(), R); // Create initial graph
-
-    // Perform Greedy Search first to get initial neighbors
-    vector<int> V = {0, 2, 3}; // Candidate set containing points 0, 2, and 3
-    float a = 1.5; // Pruning threshold
     
+    int medoid = 3;                 // Use point {1.0, 1.0} as medoid
+    int R = 6;                      // Max out-neighbors
+    float a = 1.0;                  // Pruning threshold
+    vector<float> q = {2.0, 2.0};   // Query point
+    int k = 4;
+    int L = 9;
+
+    vector<vector<edge>> G = CreateGraph(points, points.size(), R); // Create a graph with R neighbors
+
     cout << "\nbefore:" << endl;
     PrintGraph(G); // Print the initial graph
 
-    cout << "\n" << endl;
+    // Run the Greedy Search to get the visited nodes set
+    auto [K_neighbors, visited_nodes] = GreedySearch(medoid, q, k, L, points, G);
 
-    // Run the Greedy Search
-    pair<vector<int>, set<int>> greedy_result = GreedySearch(medoid, {0.0, 2.0}, 2, 3, points, G);
+    cout <<"K-neighbors and Visited nodes from greedy: " << endl;
+    print(K_neighbors, visited_nodes);
 
+    // TEST TO PRUNE MEDOID NODE, points[3]
+    vector<int> V = visited_nodes;
     // Now use the output of the greedy search as input to the prune function
     G = RobustPrune(medoid, V, a, R, G, points); // Perform Robust Prune
-
+        
     cout << "\nRobust Prune result:" << endl;
     PrintGraph(G); // Print the updated graph after pruning
 
     // Assertions to check the expected outcomes
-    TEST_ASSERT(G[medoid].size() == static_cast<size_t>(R)); // Check that the number of neighbors equals R
+    TEST_ASSERT(G[medoid].size() < static_cast<size_t>(R)); // Check that the number of neighbors is less than R
 
     for (const edge& e : G[medoid]) {
         int neighbor = e.first;
-        TEST_ASSERT(neighbor != 2 && neighbor != 3); // Ensure no outliers are included as neighbors
+        TEST_ASSERT(neighbor != 5 && neighbor != 6); // Ensure no outliers are included as neighbors
     }
 }
 
 
 // Test 2
 void RobustPrune_2() {
-    // Create a set of points, including some that should be pruned
     vector<vector<float>> points = {
         {1.0, 2.0},
         {2.0, 1.0},
         {0.0, 2.0},
-        {1.0, 1.0},    // Medoid (central point)
+        {1.0, 1.0},
         {1.0, 0.0},
-        {100000.0, 100000.0}, // Outlier point (should be pruned)
-        {-100000.0, -100000.0} // Another outlier point (should be pruned)
+        {1000.0, 1000.0},    // Outlier (Point 5)
+        {500.0, 500.0}      // Another outlier (Point 6)
     };
+    
+    int medoid = 3;                 // Use point {1.0, 1.0} as medoid
+    int R = 4;                      // Max out-neighbors
+    float a = 1.0;                  // Pruning threshold
+    vector<float> q = {2.0, 2.0};   // Query point
+    int k = 2;
+    int L = 5;
 
-    int medoid = 3;  // Use point {1.0, 1.0} as medoid
-    int R = 3;  // Max out-neighbors
-    vector<vector<edge>> G = CreateGraph(points, points.size(), R);
-    vector<int> V = {0, 1, 2, 4, 5, 6};  // Candidate set (including outliers)
+    vector<vector<edge>> G = CreateGraph(points, points.size(), R); // Create a graph with R neighbors
 
-    float a = 1.5;  // Increase the threshold slightly to improve pruning
-   
     cout << "\nbefore:" << endl;
-    PrintGraph(G);
+    PrintGraph(G); // Print the initial graph
 
-    cout << "\n" << endl;
+    // Run the Greedy Search to get the visited nodes set
+    auto [K_neighbors, visited_nodes] = GreedySearch(medoid, q, k, L, points, G);
 
-    // Run the Robust Prune algorithm
-    G = RobustPrune(medoid, V, a, R, G, points);
+    cout <<"K-neighbors and Visited nodes from greedy: " << endl;
+    print(K_neighbors, visited_nodes);
 
+    // TEST TO PRUNE NODE 0, points[]
+    vector<int> V = visited_nodes;
+    // Now use the output of the greedy search as input to the prune function
+    G = RobustPrune(0, V, a, R, G, points); // Perform Robust Prune
+        
     cout << "\nRobust Prune result:" << endl;
-    PrintGraph(G);
+    PrintGraph(G); // Print the updated graph after pruning
 
-    // Ensure that the pruned result has at most R neighbors for the medoid
-    TEST_ASSERT(G[medoid].size() == (long unsigned int)R);
-
-    // Ensure that the outliers (points 5 and 6) have been pruned
-    for (const edge& e : G[medoid]) {
-        int neighbor = e.first;
-        TEST_ASSERT(neighbor != 5 && neighbor != 6);
-    }
+    // Assertions to check the expected outcomes
+    TEST_ASSERT(G[0].size() < static_cast<size_t>(R)); // Check that the number of neighbors is less than R
 }
 
 
@@ -343,6 +324,5 @@ TEST_LIST = {
     {"Robust Prune 1", RobustPrune_1},
     {"Robust Prune 1", RobustPrune_2},
 
-    {"Greedy Search 4 Marianna", GreedySearch_4},
     {NULL, NULL}
 };

@@ -22,16 +22,16 @@ int main(){
     string groundtruth_data = "../datasets/siftsmall/siftsmall_groundtruth.ivecs";
     vector<vector<int>> groundtruth = read_ivecs(groundtruth_data);
 
+
     int k = 10;         // Number of nearest neighbors to find
     int L = 50;
     int R = 20;         // Number of neighbors per node
     int medoid = -1;    // The medoid of graph
 
+
     // Vamana Indexing Algorithm (Creation of Vamana Graph)
     vector<vector<edge>> VamanaGraph = VamanaIndexing(vectors, L, R, medoid);
     
-    PrintGraph(VamanaGraph);
-
 
     // Greedy Search for every query point of the "Query Dataset"          
     int queries_size = queries.size(); 
@@ -39,7 +39,7 @@ int main(){
 
         vector<float> query = queries[i];     // Query point
 
-        //auto [result_set, visited_nodes] = GreedySearch(medoid, query, k, L, vectors, VamanaGraph);
+        auto [neighbors_list, visited_nodes] = GreedySearch(medoid, query, k, L, vectors, VamanaGraph);
 
 
         // Εκτύπωση αποτελεσμάτων Greedy 
