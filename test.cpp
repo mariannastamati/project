@@ -267,7 +267,7 @@ void RobustPrune_2() {
     int R = 4;                      // Max out-neighbors
     float a = 1.0;                  // Pruning threshold
     vector<float> q = {2.0, 2.0};   // Query point
-    int k = 2;
+    int k = 3;
     int L = 5;
 
     vector<vector<edge>> G = CreateGraph(points, points.size(), R); // Create a graph with R neighbors
