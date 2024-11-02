@@ -2,6 +2,7 @@
 #include "acutest.h"
 #include "VamanaIndexing.h"
 #include "printGraph.h"
+#include "recall.h"
 
 using namespace std;
 
@@ -292,12 +293,6 @@ void RobustPrune_2() {
     // Assertions to check the expected outcomes
     TEST_ASSERT(G[0].size() < static_cast<size_t>(R)); // Check that the number of neighbors is less than R
 }
-
-
-
-
-
-
 
 
 

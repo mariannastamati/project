@@ -39,5 +39,5 @@ void OverallRecall(float sum, int queries_size){
 
     // Print Recall but keep only 2 decimal
     cout << fixed << setprecision(2);
-    cout << "Overall Recall: " << overall << "%" << endl;
+    cout << "Overall Recall: " << overall*100 << "%" << endl;
 }  
