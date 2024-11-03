@@ -25,9 +25,21 @@ vector<vector<edge>> RobustPrune(int p, vector<int>& V, float a, int R, vector<v
 
     while (!V.empty()) {
         // Find the closest point to p
-        int p_star = *std::min_element(V.begin(), V.end(), [&](int p1, int p2) {
-            return EuclideanDistance(data[p], data[p1]) < EuclideanDistance(data[p], data[p2]);
-        });
+        double mindist = INFINITY;
+        int p_star = -1;
+
+        int size = V.size();
+        for(int i = 0; i < size; i++){
+
+            // Calculate Euclidean distance between p' and p
+            double dist = EuclideanDistance(data[V[i]], data[p]);
+
+            // Keep min distance and p*
+            if(dist < mindist){
+                mindist = dist;
+                p_star = V[i];
+            }
+        }
 
         // Add p_star to the neighbors
         N_out.push_back(p_star);
