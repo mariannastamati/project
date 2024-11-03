@@ -2,11 +2,11 @@
 
 ### Άσκηση 1 - Αναζήτηση εγγύτερου γείτονα (Nearest Neighbor Search)
 
-To compile type: make  
-To run type: ./executable  
-To compile using Test Main type: make test=yes  
-To run with Test Main type: ./executable   
-To clean all type: make clean  
+To compile type: ```make```
+To run type: ```./executable``` 
+To compile using Test Main type: ```make test=yes```  
+To run with Test Main type: ```./executable```   
+To clean all type: ```make clean``` 
 
 
 **AUTHORS**  
