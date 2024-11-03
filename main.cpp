@@ -29,6 +29,10 @@ int main(){
     int R = 20;          // Number of neighbors per node
     int medoid = -1;     // The medoid of graph
 
+    cout << "-----------------------" << endl;
+    cout << "k = " << k << endl;
+    cout << "L = " << L << endl;
+    cout << "R = " << R << endl;
 
     // Vamana Indexing Algorithm (Creation of Vamana Graph)
     vector<vector<edge>> VamanaGraph = VamanaIndexing(vectors, L, R, medoid);
@@ -55,7 +59,8 @@ int main(){
     }
 
     // Print Overall Recall
-    OverallRecall(sum, queries_size);                               
+    OverallRecall(sum, queries_size);
+    cout << "-----------------------" << endl;                             
     
     return 0;
 }
