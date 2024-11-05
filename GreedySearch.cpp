@@ -1,75 +1,79 @@
 #include "GreedySearch.h"
 
-#include <queue>
-#include <cmath>
 
-using namespace std;
+// Function to remove common elements
+vector<int> removeCommonElements(const vector<int>& visited, const vector<int>& neighbors_list){
+    vector<int> result; //  Variable to save result
 
-// Function to compare two nodes (a, b) and select the closest one 
-bool compare(int a, int b, const vector<float>& query, const vector<vector<float>>& vectors) {
-    return EuclideanDistance(query, vectors[a]) > EuclideanDistance(query, vectors[b]);
-}
+    for (int num : neighbors_list){
 
-// Greedy Search 
-pair<vector<int>, set<int>> GreedySearch(const vector<vector<edge>>& graph, const vector<float>& query, const vector<vector<float>>& vectors, int start_node, int k, int L) {
-
-    set<int> visited;                 // Set for the nodes we have visited
-    vector<int> result_set;           // Result set 
-    vector<int> search_list = {start_node};   // Search list which we initialize with the start node 
-    
-    visited.insert(start_node);       
-
-    // Sorting the search list based on the distance from the query
-    sort(search_list.begin(), search_list.end(), [&](int a, int b) {
-        return compare(a, b, query, vectors);  
-    });
-
-    // Comparison function for priority queque
-    auto comp = [&](int a, int b) {
-        return EuclideanDistance(query, vectors[a]) > EuclideanDistance(query, vectors[b]);
-    };
-
-    priority_queue<int, vector<int>, decltype(comp)> pq(comp);
-    
-    while (!search_list.empty()) {
-
-        // Finding the nearest p* node from non-visitors
-        int closest = search_list.back();
-        search_list.pop_back();
-        
-        // Add all neighbours of the closest node to the search list
-        for (const auto& neighbor : graph[closest]) {
-            int neighbor_node = neighbor.first;
-            
-            // If the node has not already been visited, add it to the list
-            if (visited.find(neighbor_node) == visited.end()) {
-                visited.insert(neighbor_node);
-                search_list.push_back(neighbor_node);
-
-                // Insert the new node in priority_queue to keep only the k closest nodes
-                pq.push(neighbor_node);
-
-                // Keep only the L best
-                int pq_size = pq.size();
-                if (pq_size > L) {
-                    pq.pop();
-                }
-            }
+        if (find(visited.begin(), visited.end(), num) == visited.end()) {
+            // If num does not belong to visited, add to result
+            result.push_back(num);
         }
     }
+    return result;
+}
 
-    // Return of the k nearest nodes
-    while (!pq.empty()) {
-        result_set.push_back(pq.top());
-        pq.pop();
+
+// Greedy Search Algorithm
+pair<vector<int>, vector<int>> GreedySearch(int medoid, const vector<float>& query, int k, int L, const vector<vector<float>>& vectors,
+const vector<vector<edge>>& graph){
+
+    vector<int> visited;              // Set for the nodes we have visited (empty)
+    vector<int> List = {medoid};      // Search list which we initialize with the start node 
+    
+    vector<int> L_without_V = removeCommonElements(visited,List);   // L\V
+
+    // While L\V != empty
+    while(!L_without_V.empty()){
+
+        // For every p in L_without_V keep the min euclidean from p and query point
+        double mindist = INFINITY;
+        int pstar = -1;
+
+        int size = L_without_V.size();
+        for(int p = 0; p < size; p++){
+
+            // Calculate Euclidean distance between p and query point
+            double dist = EuclideanDistance(vectors[L_without_V[p]], query);
+
+            // Keep min distance and p*
+            if(dist < mindist){
+                mindist = dist;
+                pstar = L_without_V[p];
+            }
+        }
+
+        // Update list <- list + (neighbors of p* (pstar))
+        for (const auto& e : graph[pstar]){
+            if(find(List.begin(), List.end(), e.first) == List.end())
+                List.push_back(e.first);
+        }
+
+        // Update visited <- visited + p* (pstar)
+        visited.push_back(pstar);
+
+        // Checking if List_size is greater than L
+        int Lsize = List.size();
+        if(Lsize > L){
+
+            // Keep only the top L elements in List 
+            sort(List.begin(), List.end(), [&query, &vectors](int a, int b){
+                return EuclideanDistance(vectors[a], query) < EuclideanDistance(vectors[b], query);
+            });
+            List.resize(L); // Keep only the top L closest points
+        }
+
+        // Calculate L\V with the updated data
+        L_without_V = removeCommonElements(visited,List);
     }
 
-    // We keep only the k closest nodes and return them
-    sort(result_set.begin(), result_set.end(), comp);
-    int r_set = result_set.size();
-    if (r_set > k) {
-        result_set.resize(k);
-    }
 
-    return make_pair(result_set, visited);  // Return the result set and the visited set
+    sort(List.begin(), List.end(), [&query, &vectors](int a, int b){
+        return EuclideanDistance(vectors[a], query) < EuclideanDistance(vectors[b], query);
+    });
+    List.resize(k); // We return only the k closest points
+
+    return make_pair(List, visited);
 }
