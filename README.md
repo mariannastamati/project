@@ -1,6 +1,6 @@
 ## K23α - Ανάπτυξη Λογισμικού Για Πληροφοριακά Συστήματα
 
-### Άσκηση 1 - Αναζήτηση εγγύτερου γείτονα (Nearest Neighbor Search)
+### Part 1 - Αναζήτηση εγγύτερου γείτονα (Nearest Neighbor Search)
 
 To compile type: ```make```  
 To run type: ```./executable```   
