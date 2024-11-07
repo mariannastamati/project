@@ -8,6 +8,8 @@ To compile using Test Main type: ```make test=yes```
 To run with Test Main type: ```./executable```     
 To clean all type: ```make clean```    
 
+Κατασκευή ευρετηρίου-γράφου Vamana, υλοποίηση αλγορίθμων GreedySearch και RobustPrune, εύρεση του medoid με αλγόριθμο brute force.
+
 ### Part 2 - Προσεγγιστική Αναζήτηση Εγγύτερων Γειτόνων με Φίλτρα - Filtered ANNS
 
 
