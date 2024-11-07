@@ -8,6 +8,8 @@ To compile using Test Main type: ```make test=yes```
 To run with Test Main type: ```./executable```     
 To clean all type: ```make clean```    
 
+### Part 2 - Προσεγγιστική Αναζήτηση Εγγύτερων Γειτόνων με Φίλτρα - Filtered ANNS
+
 
 **AUTHORS**  
 [Χριστίνα Διαμαντή](https://github.com/ChristinaDiam) - 1115201800046  
