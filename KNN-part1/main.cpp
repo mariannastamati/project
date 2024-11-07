@@ -12,15 +12,15 @@
 int main(){
 
     // Reading input files
-    string base_data = "../datasets/siftsmall/siftsmall_base.fvecs";
+    string base_data = "../datasets1/siftsmall/siftsmall_base.fvecs";
     vector<vector<float>> vectors = read_fvecs(base_data);
 
     // Reading query files
-    string query_data = "../datasets/siftsmall/siftsmall_query.fvecs";
+    string query_data = "../datasets1/siftsmall/siftsmall_query.fvecs";
     vector<vector<float>> queries = read_fvecs(query_data);
 
     // Reading groundtruth files
-    string groundtruth_data = "../datasets/siftsmall/siftsmall_groundtruth.ivecs";
+    string groundtruth_data = "../datasets1/siftsmall/siftsmall_groundtruth.ivecs";
     vector<vector<int>> groundtruth = read_ivecs(groundtruth_data);
 
 
