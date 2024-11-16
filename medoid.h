@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 
+#include "print.h"
+
 using namespace std;
 
 
