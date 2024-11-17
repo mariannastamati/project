@@ -41,6 +41,5 @@ int main(int argc, char **argv){
     CleanQueries(queries);
     cout << "Num of queries: " << queries.size() << endl << endl;
 
- 
     return 0;
 }
