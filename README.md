@@ -13,7 +13,8 @@ To clean all type: ```make clean```
 ### Part 2 - Προσεγγιστική Αναζήτηση Εγγύτερων Γειτόνων με Φίλτρα - Filtered ANNS
 
 Κατασκευή ευρετηρίου γράφου με δύο τρόπους Filtered Vamana και Stiched Vamana, υλοποίηση αλγορίθμων FilteredGreedySearch και FilteredRobustPrune, 
-εύρεση start node (medoid για κάθε φίλτρο) με την χρήση του αλγορίθμου FindMedoid. Χρησιμοποιούνται datasets που έχουν μόνο ένα φίλτρο σε κάθε στοιχείο-κόμβο
+εύρεση start node (medoid για κάθε φίλτρο) με την χρήση του αλγορίθμου FindMedoid.  
+Χρησιμοποιούνται datasets που έχουν μόνο ένα φίλτρο σε κάθε στοιχείο-κόμβο
 (τα datasets, πριν χρησιμοποιηθούν, "καθαρίζονται" και αφαιρούνται τα timestamps και τα queries που περιέχουν ερωτήματα που αφορούν timestamps).
 
 
