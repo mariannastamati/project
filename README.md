@@ -16,8 +16,8 @@ To compile type: ```make```
 
 To run using default arguments type: ```make run```  
 To run and save output type: ```make save```  
-To run using custom arguments type: ```make run ARGS="../yourdataset.bin ../yourqueries.bin <a> <t> <L> <R> <k>"```  
-To run and save output using custom arguments type: ```make save ARGS="../yourdataset.bin ../yourqueries.bin <a> <t> <L> <R> <k>"```   
+To run using custom arguments type: ```make run ARGS="../dataset.bin ../queries.bin <a> <t> <L> <R> <k>"```  
+To run and save output using custom arguments type: ```make save ARGS="../dataset.bin ../queries.bin <a> <t> <L> <R> <k>"```   
 
 To run using Valgrind type: ```make val```  
  
