@@ -1,0 +1,6 @@
+#ifndef FILTEREDVAMANA_H
+#define FILTEREDVAMANA_H
+
+
+
+#endif
