@@ -16,7 +16,7 @@ OBJS = $(SRCS:.cpp=.o)
 TARGET = executable
 
 # Command line arguments for the executable program
-ARGS =
+ARGS = ../datasets2/dummy-data.bin ../datasets2/dummy-queries.bin 1.2 10 60 12 50
 
 # Command line arguments for Valgrind
 VALGRIND_ARGS = --track-origins=yes --leak-check=full --trace-children=yes
@@ -31,6 +31,10 @@ $(TARGET): $(OBJS)
 
 # Run the executable program
 run: $(TARGET)
+	./$(TARGET) $(ARGS) 
+
+# Run the executable program and save output
+save: $(TARGET)
 	./$(TARGET) $(ARGS) >> output.txt
 
 # Run the executable program under Valgrind

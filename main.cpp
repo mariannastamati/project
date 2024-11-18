@@ -11,14 +11,28 @@
 
 int main(int argc, char **argv){
 
-    string source_path = "../datasets2/dummy-data.bin";
-    string query_path = "../datasets2/dummy-queries.bin";
-  
-
-    // Also accept other path for source data
-    if (argc > 1) {
-        source_path = string(argv[1]);
+    // Check if given arguments are acceptable
+    if (argc != 8) {
+        cout << "Usage: <source_path> <query_path> <a> <t> <L> <R> <k>" << endl;
+        return 1; // Exit with error
     }
+
+    // Parse command-line arguments
+    string source_path = argv[1];
+    string query_path = argv[2];
+    float a = atof(argv[3]);            // Threshold for RobustPrune algorithm (a>=1)
+    int t = atoi(argv[4]);              // Threshold for FindMedoid algorithm
+    int L = atoi(argv[5]);              // Search list size for GreedySearch algorithm
+    int R = atoi(argv[6]);              // Number of max out-degree for every node
+    int k = atoi(argv[7]);              // Number of nearest neighbors we want to find
+    
+    // Print arguments
+    cout << "Prune threshold a: " << a << endl;
+    cout << "Medoid threshold t: " << t << endl;
+    cout << "Search list size L: " << L << endl;
+    cout << "Max out-degree R: " << R << endl;
+    cout << "Number of nearest neighbors k: " << k << endl << endl;
+    
 
     uint32_t num_data_dimensions = 102;
 
