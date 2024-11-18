@@ -31,3 +31,13 @@ void CleanQueries(vector<vector<float>>& data){
         data[i].erase(data[i].begin() + 2);  // Remove fourth element -r (special num for Timestamps)
     }
 }
+
+
+// Function to remove filters from data
+void RemoveFilters(vector<vector<float>> &data){
+
+    for (size_t i = 0; i < data.size(); ++i) {
+   
+        data[i].erase(data[i].begin());  // Remove the first element
+    }
+}

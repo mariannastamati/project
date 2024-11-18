@@ -98,3 +98,34 @@ vector<int> randompoints(vector<int> &points, int t){
 
     return rand_points;
 }
+
+
+// Function to find the medoid of a dataset
+int Medoid(const vector<vector<float>>& data){
+
+    int medoid = -1;            // Variable to keep medoid
+    double minsum = INFINITY;    // Variable to check for a smaller sum
+
+    // Calculate the sum of Euclidean distance for every node of the graph with the other nodes
+    int size = data.size();
+    for (int i=0; i < size; i++){
+        
+        double sum = 0.0;
+
+        for(int j=0; j < size; j++){
+            if(i != j){   // If the nodes are not the same, calculate Euclidean distance
+                
+                sum = sum + EuclideanDistance(data[i],data[j]);
+            }
+        }
+
+        // Check if a smaller sum is found and keep the new medoid of graph
+        if(sum < minsum){
+
+            minsum = sum;
+            medoid = i;          // "i" node is the medoid
+        }
+    }
+    cout << "Medoid of the Dataset: " << medoid << endl;
+    return medoid;
+}
