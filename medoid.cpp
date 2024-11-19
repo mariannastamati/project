@@ -1,5 +1,5 @@
 #include "medoid.h"
-#include "print.h"
+
 
 vector<Map> FindMedoid(vector<vector<float>> &nodes, int threshold){
 
@@ -70,8 +70,6 @@ vector<Map> FindMedoid(vector<vector<float>> &nodes, int threshold){
         // Increase counter of T[p*]
         T[pstar]++;
     }
-
-    PrintMedoidMap(M);
 
     return M;
 }
@@ -145,6 +143,6 @@ int findStartNodeFromFilter(vector<Map> STf, float filter){
             return STf[i].start_node;
         }
     }
-    
+
     return -1;
 }
