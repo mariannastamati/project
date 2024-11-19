@@ -1,5 +1,5 @@
 #include "medoid.h"
-
+#include "print.h"
 
 vector<Map> FindMedoid(vector<vector<float>> &nodes, int threshold){
 
@@ -71,6 +71,8 @@ vector<Map> FindMedoid(vector<vector<float>> &nodes, int threshold){
         T[pstar]++;
     }
 
+    PrintMedoidMap(M);
+
     return M;
 }
 
@@ -130,4 +132,19 @@ int Medoid(const vector<vector<float>>& data){
     }
     cout << "Medoid of the Dataset: " << medoid << endl;
     return medoid;
+}
+
+
+// Function to find a start node from given filter
+int findStartNodeFromFilter(vector<Map> STf, float filter){
+
+    int size = STf.size();
+    for(int i = 0; i < size; i++){
+
+        if(STf[i].filter == filter){
+            return STf[i].start_node;
+        }
+    }
+    
+    return -1;
 }
