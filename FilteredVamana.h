@@ -3,6 +3,7 @@
 
 #include "medoid.h"
 #include "cleandata.h"
+#include "print.h"
 
 
 // Filtered Vamana Indexing algorithm, returns a directed graph with out-degree <= R
