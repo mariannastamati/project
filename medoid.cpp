@@ -50,11 +50,13 @@ vector<Map> FindMedoid(vector<vector<float>> &nodes, int threshold){
         vector<int> Rf = randompoints(Pf[i].matching_points,threshold);
 
         // For every ramdom choosen point in Rf, keep min as p*
-        int pstar = INT_MAX;
+        int pstar = -1;
+        int minT = INT_MAX;
         int Rf_size = Rf.size();
         for(int j = 0; j < Rf_size; j++){
 
-            if(T[Rf[j]] < pstar){
+            if(T[Rf[j]] < minT){
+                minT = T[Rf[j]];
                 pstar = Rf[j];
             }
         }
@@ -97,4 +99,50 @@ vector<int> randompoints(vector<int> &points, int t){
     vector<int> rand_points(temp.begin(), temp.begin() + t);
 
     return rand_points;
+}
+
+
+// Function to find the medoid of a dataset
+int Medoid(const vector<vector<float>>& data){
+
+    int medoid = -1;            // Variable to keep medoid
+    double minsum = INFINITY;    // Variable to check for a smaller sum
+
+    // Calculate the sum of Euclidean distance for every node of the graph with the other nodes
+    int size = data.size();
+    for (int i=0; i < size; i++){
+        
+        double sum = 0.0;
+
+        for(int j=0; j < size; j++){
+            if(i != j){   // If the nodes are not the same, calculate Euclidean distance
+                
+                sum = sum + EuclideanDistance(data[i],data[j]);
+            }
+        }
+
+        // Check if a smaller sum is found and keep the new medoid of graph
+        if(sum < minsum){
+
+            minsum = sum;
+            medoid = i;          // "i" node is the medoid
+        }
+    }
+    cout << "Medoid of the Dataset: " << medoid << endl;
+    return medoid;
+}
+
+
+// Function to find a start node from given filter
+int findStartNodeFromFilter(vector<Map> STf, float filter){
+
+    int size = STf.size();
+    for(int i = 0; i < size; i++){
+
+        if(STf[i].filter == filter){
+            return STf[i].start_node;
+        }
+    }
+
+    return -1;
 }

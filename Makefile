@@ -9,14 +9,18 @@ else
 	SRCS = $(subst test.cpp,,$(wildcard *.cpp))
 endif
 
-# Object files
+# Object file
 OBJS = $(SRCS:.cpp=.o)
 
 # Executable name
 TARGET = executable
 
 # Command line arguments for the executable program
-ARGS = ../datasets2/dummy-data.bin ../datasets2/dummy-queries.bin 1.2 10 60 12 50
+ifeq ($(test),yes)
+	ARGS =
+else
+	ARGS = ../datasets2/dummy-data.bin ../datasets2/dummy-queries.bin 1.2 10 60 12 50
+endif
 
 # Command line arguments for Valgrind
 VALGRIND_ARGS = --track-origins=yes --leak-check=full --trace-children=yes
@@ -39,7 +43,7 @@ save: $(TARGET)
 
 # Run the executable program under Valgrind
 val: $(TARGET)
-	valgrind $(VALGRIND_ARGS) ./$(TARGET) $(ARGS) >> output.txt
+	valgrind $(VALGRIND_ARGS) ./$(TARGET) $(ARGS)
 
 # Clean the build files
 clean:

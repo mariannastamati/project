@@ -7,6 +7,7 @@
 #include "io.h"
 #include "print.h"
 #include "cleandata.h"
+#include "FilteredVamana.h"
 
 
 int main(int argc, char **argv){
@@ -54,6 +55,12 @@ int main(int argc, char **argv){
     // CLEAN QUERIES: Revome query_type 2 and 3, and elements related to timestamps 
     CleanQueries(queries);
     cout << "Num of queries: " << queries.size() << endl << endl;
+
+
+    // Call Filtered Vamana algorithm to create a graph
+    cout << "Running Filtered Vamana" << endl;
+    vector <graph> G = FilteredVamana(nodes,a,L,R,t);
+
 
     return 0;
 }
