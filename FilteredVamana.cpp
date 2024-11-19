@@ -20,6 +20,25 @@ vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int 
     // Sigma (σ) is a random permutation of points 1..n (n = the points in the dataset)
     vector<int> sigma = random_permutation(nodes);
 
+    // For every node in dataset
+    int size = nodes.size();
+    for(int i = 0; i < size; i++){
+
+        // Find the start node of filter of σ[i]
+        int currentPoint = sigma[i];
+        float currentFilter = nodes[currentPoint][0];
+        int startNode = findStartNodeFromFilter(STf, currentFilter);
+
+        // Call Filtered Greedy Search
+        //  auto [K_neighbors, visited_nodes] = FilteredGreedySearch(startNode, temp[currentPoint], 0, L, currentFilter, temp, G);
+        // (void) K_neighbors;
+
+        // Call Filtered Robust Pune to update out-neighbors of σ[i]
+        // G = FilteredRobustPrune(currentPoint, visited_nodes, a, R);
+
+        // the same as part 1
+    }
+
     return G;
 }
 
