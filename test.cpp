@@ -69,7 +69,6 @@ void Medoid_2(){
 }
 
 
-
 /* Test Main */
 TEST_LIST = {
 

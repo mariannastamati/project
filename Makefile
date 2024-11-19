@@ -9,7 +9,7 @@ else
 	SRCS = $(subst test.cpp,,$(wildcard *.cpp))
 endif
 
-# Object files
+# Object file
 OBJS = $(SRCS:.cpp=.o)
 
 # Executable name

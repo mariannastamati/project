@@ -1,5 +1,5 @@
 #include "medoid.h"
-#include "print.h"
+
 
 vector<Map> FindMedoid(vector<vector<float>> &nodes, int threshold){
 
