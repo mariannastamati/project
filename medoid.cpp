@@ -50,11 +50,13 @@ vector<Map> FindMedoid(vector<vector<float>> &nodes, int threshold){
         vector<int> Rf = randompoints(Pf[i].matching_points,threshold);
 
         // For every ramdom choosen point in Rf, keep min as p*
-        int pstar = INT_MAX;
+        int pstar = -1;
+        int minT = INT_MAX;
         int Rf_size = Rf.size();
         for(int j = 0; j < Rf_size; j++){
 
-            if(T[Rf[j]] < pstar){
+            if(T[Rf[j]] < minT){
+                minT = T[Rf[j]];
                 pstar = Rf[j];
             }
         }
