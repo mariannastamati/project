@@ -25,11 +25,11 @@ struct Map{
 
     float filter;
     int start_node;
-    int node_id;
+   // int node_id;
 
-     bool satisfiesFilter(float f) const {
-        return filter == f;
-    }
+  //   bool satisfiesFilter(float f) const {
+  //      return filter == f;
+  //  }
 };
 
 
