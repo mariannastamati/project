@@ -7,12 +7,12 @@ vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int 
     // Initialize G to an empty graph
     vector<graph> G;
 
-    // Remove filters from dataset to help find medoid of dataset
+    // Remove filters from dataset to κeep only vectors (for euclidean distance calculation)
     vector<vector<float>> temp = nodes;
     RemoveFilters(temp);
 
-    // Find Medoid on dataset
-    int s = Medoid(temp);
+    // Find Medoid on dataset (we don't use it in this algorithm)
+    //int s = Medoid(temp);
 
     // Find start node (medoid of cluster) for every filter f
     vector<Map> STf = FindMedoid(nodes,threshold);
@@ -36,7 +36,47 @@ vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int 
         // Call Filtered Robust Pune to update out-neighbors of σ[i]
         // G = FilteredRobustPrune(currentPoint, visited_nodes, a, R);
 
-        // the same as part 1
+        // For every Nearest Neighbor j of sigma[i]
+        //vector<edge> nb = G[sigma[i]].neighbors;
+        //Vsize = nb.size();
+        //for(int j = 0; j < Vsize; j++){
+
+        //    int NearNeighbor = nb[j];
+
+        //    int NNsize = G[NearNeighbor].neighbors.size(); 
+
+            // Checking if sigma[i] already exists in the Nearest Neighbor j
+        //    bool exists = false;
+        //    for(int k = 0; k < NNsize; k++){
+                   
+        //        if(nb[k].first == sigma[i])
+        //        {
+        //            exists = true;
+        //            break;
+        //        }
+
+        //    }
+
+            // If it doesn't already exists add sigma[i] in the neighbors of NearNeighbor
+            //if(exists == false){
+
+            //  float distance = EuclideanDistance(temp[NearNeighbor],temp[sigma[i]]);
+            //  G[NearNeighbor].neighbors.emplace_back(sigma[i], distance);
+            //} 
+
+            //int nnsize = G[NearNeighbor].neighbors.size();
+            //if(nnsize > R){
+
+                    // Run Filtered Robust Prune to update out-neighbors of j
+                    //vector<int> nb_nodes;
+                    //for(int l = 0; l < Vsize; l++){
+
+                        //nb_nodes.emplace_back(nb[l].first);
+                    //}
+                    // G = FilteredRobustPrune(j, nb_nodes, a, R);
+            //}
+
+        //}
     }
 
     return G;
