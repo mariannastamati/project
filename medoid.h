@@ -3,8 +3,12 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm> 
+#include <random>
+#include <iterator>
+#include <climits>
 
-#include "print.h"
+#include "graph.h"
 
 using namespace std;
 
@@ -31,5 +35,14 @@ struct Map{
 
 // Function to find medoid (the start node) of every filter. Returns a map with filters and their start nodes
 vector<Map> FindMedoid(vector<vector<float>> &nodes, int threshold);
+
+// Function to choose τ random points from a vector
+vector<int> randompoints(vector<int> &points, int t);
+
+// Function to find the medoid of a dataset
+int Medoid(const vector<vector<float>>& data);
+
+// Function to find a start node from given filter
+int findStartNodeFromFilter(vector<Map> STf, float filter);
 
 #endif
