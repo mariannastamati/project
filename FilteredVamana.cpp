@@ -4,15 +4,22 @@
 // Filtered Vamana Indexing algorithm
 vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int R, int threshold){
 
-    // Initialize G to an empty graph
+    // Initialize G to an empty graph (just nodes, no neighbors no edges)
     vector<graph> G;
+
+    // Add filters to every node and an empty neighbors list
+    int size = nodes.size();
+    for(int i = 0; i < size; i++){
+
+        graph node;
+        node.filter = nodes[i][0];
+        node.neighbors = {};
+        G.push_back(node);
+    }
 
     // Remove filters from dataset to κeep only vectors (for euclidean distance calculation)
     vector<vector<float>> temp = nodes;
     RemoveFilters(temp);
-
-    // Find Medoid on dataset (we don't use it in this algorithm)
-    //int s = Medoid(temp);
 
     // Find start node (medoid of cluster) for every filter f
     vector<Map> STf = FindMedoid(nodes,threshold);
@@ -21,7 +28,6 @@ vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int 
     vector<int> sigma = random_permutation(nodes);
 
     // For every node in dataset
-    int size = nodes.size();
     for(int i = 0; i < size; i++){
 
         // Find the start node of filter of σ[i]
