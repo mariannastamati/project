@@ -64,7 +64,7 @@ int main(int argc, char **argv){
     vector <graph> G = FilteredVamana(nodes,a,L,R,t,STf);
 
     // Call Stitched Vamana algorithm to create a graph
-    cout << "Running Stitced Vamana" << endl;
+    cout << "Running Stitched Vamana" << endl;
 
 
     return 0;
