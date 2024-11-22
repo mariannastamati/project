@@ -2,7 +2,7 @@
 
 
 // Filtered Vamana Indexing algorithm
-vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int R, int threshold){
+vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int R, int threshold, vector<Map> &STf){
 
     // Initialize G to an empty graph (just nodes, no neighbors no edges)
     vector<graph> G;
@@ -22,7 +22,7 @@ vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int 
     RemoveFilters(temp);
 
     // Find start node (medoid of cluster) for every filter f
-    vector<Map> STf = FindMedoid(nodes,threshold);
+    STf = FindMedoid(nodes,threshold);
 
     // Sigma (σ) is a random permutation of points 1..n (n = the points in the dataset)
     vector<int> sigma = random_permutation(nodes);
