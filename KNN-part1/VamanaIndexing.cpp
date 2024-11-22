@@ -24,11 +24,12 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
 
         Graph = RobustPrune(sigma[i], V, a, R, Graph, data);
 
-        // For every Nearest Neighbor j of sigma[i]
-        int Vsize = V.size();
+        // For every Neighbor j of sigma[i]
+        vector<edge> nb = Graph[sigma[i]];
+        int Vsize = nb.size();
         for(int j = 0; j < Vsize; j++){
 
-            int NearNeighbor = V[j];
+            int NearNeighbor = nb[j].first;
 
             int NNsize = Graph[NearNeighbor].size();
 

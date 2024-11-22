@@ -42,12 +42,12 @@ vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int 
         // Call Filtered Robust Pune to update out-neighbors of σ[i]
         // G = FilteredRobustPrune(currentPoint, visited_nodes, a, R);
 
-        // For every Nearest Neighbor j of sigma[i]
+        // For every Neighbor j of sigma[i]
         //vector<edge> nb = G[sigma[i]].neighbors;
         //Vsize = nb.size();
         //for(int j = 0; j < Vsize; j++){
 
-        //    int NearNeighbor = nb[j];
+        //    int NearNeighbor = nb[j].first;
 
         //    int NNsize = G[NearNeighbor].neighbors.size(); 
 
