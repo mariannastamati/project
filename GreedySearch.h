@@ -9,7 +9,7 @@ using namespace std;
 
 
 // Greedy Search Algorithm 
-pair<vector<int>, vector<int>> GreedySearch(int medoid, const vector<float>& query, int k, int L,
+pair<vector<int>, vector<int>> GreedySearch(vector<pair<int,int>> pf_mapping, int medoid, const vector<float>& query, int k, int L,
     const vector<vector<float>>& vectors, const vector<vector<edge>>& graph);
 
 #endif // GREEDY_SEARCH_H 

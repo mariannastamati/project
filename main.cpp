@@ -8,6 +8,7 @@
 #include "print.h"
 #include "cleandata.h"
 #include "FilteredVamana.h"
+#include "StitchedVamana.h"
 
 
 int main(int argc, char **argv){
@@ -61,10 +62,12 @@ int main(int argc, char **argv){
 
     // Call Filtered Vamana algorithm to create a graph
     cout << "Running Filtered Vamana" << endl;
-    vector <graph> G = FilteredVamana(nodes,a,L,R,t,STf);
+    vector <graph> G_Filtered = FilteredVamana(nodes,a,L,R,t,STf);
 
     // Call Stitched Vamana algorithm to create a graph
     cout << "Running Stitched Vamana" << endl;
+    vector <graph> G_Stitched = StitchedVamana(nodes,1.0, 20, 5 ,3,STf);
+
 
 
     return 0;
