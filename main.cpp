@@ -56,10 +56,14 @@ int main(int argc, char **argv){
     CleanQueries(queries);
     cout << "Num of queries: " << queries.size() << endl << endl;
 
+    // Vector to keep the start node for every filter
+    vector<Map> STf;
 
     // Call Filtered Vamana algorithm to create a graph
     cout << "Running Filtered Vamana" << endl;
-    vector <graph> G = FilteredVamana(nodes,a,L,R,t);
+    vector <graph> G = FilteredVamana(nodes,a,L,R,t,STf);
+
+    PrintMedoidMap(STf);
 
 
     return 0;
