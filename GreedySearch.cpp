@@ -17,7 +17,7 @@ vector<int> removeCommonElements(const vector<int>& visited, const vector<int>& 
 
 
 // Greedy Search Algorithm
-pair<vector<int>, vector<int>> GreedySearch(vector<pair<int,int>> pf_mapping, int medoid, const vector<float>& query, int k, int L, const vector<vector<float>>& vectors,
+pair<vector<int>, vector<int>> GreedySearch(int medoid, const vector<float>& query, int k, int L, const vector<vector<float>>& vectors,
 const vector<vector<edge>>& graph){
 
     vector<int> visited;              // Set for the nodes we have visited (empty)

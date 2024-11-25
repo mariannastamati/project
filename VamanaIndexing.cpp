@@ -1,7 +1,7 @@
 #include "VamanaIndexing.h"
 
 
-vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, vector<pair<int,int>> pf_mapping, float a, int L, int R, int& s){ 
+vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, float a, int L, int R, int& s){ 
 
     // Create and initialize a random R-regular directed graph
     vector<vector<edge>> Graph = CreateGraph(data, data.size(), R);
@@ -13,7 +13,7 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, vector<pa
     for(int i = 0; i < size; i++){
 
         // Call Greedy Search giving arguments: x_0σ(i), s = medoid, k = 1 and L
-        auto [K_neighbors, visited_nodes] = GreedySearch(pf_mapping, s, data[sigma[i]], 1, L, data, Graph);
+        auto [K_neighbors, visited_nodes] = GreedySearch(s, data[sigma[i]], 1, L, data, Graph);
         
         // Call Robust Prune to update out-neighbors of σ[i] (sigma[i])
         vector<int> V = visited_nodes;       // Visited nodes of sigma[i] from Greedy Search

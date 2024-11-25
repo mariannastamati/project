@@ -51,6 +51,15 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
         // Take the vectors (without filters) matching in nodes of Pf
         vector<vector<float>> pf_nodes;
         int pfsize = Pf[i].matching_points.size();
+
+        // If the number of matching nodes for filter f is 1, then Gf is only one node
+        if(pfsize == 1){
+
+            // Create a graph with only one node and no neighbors
+            vector<vector<edge>> Gf(1);
+            continue;
+        }
+
         vector<pair<int,int>> pf_mapping;         // A map to help find the wright node in the smaller dataset of filter f
         for(int j = 0; j < pfsize; j++){
 
@@ -64,9 +73,27 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
         // Get medoid (start node of filter)
         int medoid = STf[i].start_node;
 
-        // Create a graph for filter f nodes
-        //vector<vector<edge>> g = VamanaIndexing(pf_nodes,pf_mapping,a,L_small,R_small,medoid);
+        // Find the matching node of medoid in small dataset
+        for (const auto& pair : pf_mapping){
+            if (pair.second == medoid){
 
+                medoid = pair.first;
+                break;
+            }
+        }
+
+        // If number of matching nodes for filter f is less than R_small, then set R_small to pfsize-1
+        if(pfsize <= R_small){
+
+            // Create a graph for filter f nodes (with less neighbors per node)
+            int R_size = pfsize - 1;
+            vector<vector<edge>> Gf = VamanaIndexing(pf_nodes,a,L_small,R_size,medoid);
+
+        }else{
+
+            // Create a graph for filter f nodes
+            vector<vector<edge>> Gf = VamanaIndexing(pf_nodes,a,L_small,R_small,medoid);
+        }
     }
 
     return G;
