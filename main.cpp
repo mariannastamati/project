@@ -14,8 +14,8 @@
 int main(int argc, char **argv){
 
     // Check if given arguments are acceptable
-    if (argc != 8) {
-        cout << "Usage: <source_path> <query_path> <a> <t> <L> <R> <k>" << endl;
+    if (argc != 11) {
+        cout << "Usage: <source_path> <query_path> <a> <t> <L> <R> <k> <L_smal> <R_small> <R_stitched>" << endl;
         return 1; // Exit with error
     }
 
@@ -27,6 +27,10 @@ int main(int argc, char **argv){
     int L = atoi(argv[5]);              // Search list size for GreedySearch algorithm
     int R = atoi(argv[6]);              // Number of max out-degree for every node
     int k = atoi(argv[7]);              // Number of nearest neighbors we want to find
+
+    int L_small = atoi(argv[8]);        // Search list size L for Stitched Vamana
+    int R_small = atoi(argv[9]);        // Number of max out-degree for every node in Stitched Vamana
+    int R_stitched = atoi(argv[10]);    // Number to reduce max out-degree for every node in Stitched Vamana
     
     // Print arguments
     cout << "Prune threshold a: " << a << endl;
@@ -34,7 +38,12 @@ int main(int argc, char **argv){
     cout << "Search list size L: " << L << endl;
     cout << "Max out-degree R: " << R << endl;
     cout << "Number of nearest neighbors k: " << k << endl << endl;
-    
+
+    cout << "- Arguments for Stitched Vamana only -" << endl;
+    cout << "Search list size L_small: " << L_small << endl;
+    cout << "Max out-degree R_small: " << R_small << endl;
+    cout << "Max reduced out-degree R_stitched: " << R_stitched << endl << endl;
+
 
     uint32_t num_data_dimensions = 102;
 
@@ -61,14 +70,15 @@ int main(int argc, char **argv){
     vector<Map> STf;
 
     // Call Filtered Vamana algorithm to create a graph
-    cout << "Running Filtered Vamana" << endl;
+    cout << "Running Filtered Vamana..." << endl;
     vector <graph> G_Filtered = FilteredVamana(nodes,a,L,R,t,STf);
+    cout << "Complete. Filtered Vamana Graph created" << endl << endl;
 
     // Call Stitched Vamana algorithm to create a graph
-    cout << "Running Stitched Vamana" << endl;
-    vector <graph> G_Stitched = StitchedVamana(nodes,1.0, 20, 5 ,3,STf);
-
-
-
+    cout << "Running Stitched Vamana..." << endl;
+    vector <graph> G_Stitched = StitchedVamana(nodes,a,L_small,R_small,R_stitched,STf);
+    cout << "Complete. Stitched Vamana Graph created" << endl << endl;
+    
+    
     return 0;
 }

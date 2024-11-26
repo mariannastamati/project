@@ -19,8 +19,8 @@ To compile: ```make```
 
 To run using default arguments: ```make run```  
 To run and save output: ```make save```  
-To run using custom arguments: ```make run ARGS="../dataset.bin ../queries.bin <a> <t> <L> <R> <k>"```  
-To run and save output using custom arguments: ```make save ARGS="../dataset.bin ../queries.bin <a> <t> <L> <R> <k>"```   
+To run using custom arguments: ```make run ARGS="../dataset.bin ../queries.bin <a> <t> <L> <R> <k> <L_smal> <R_small> <R_stitched>"```  
+To run and save output using custom arguments: ```make save ARGS="../dataset.bin ../queries.bin <a> <t> <L> <R> <k> <L_smal> <R_small> <R_stitched>"```   
 
 To run using Valgrind: ```make val```  
 To clean all: ```make clean```  

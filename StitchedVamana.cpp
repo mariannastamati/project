@@ -6,6 +6,10 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
     // Initialize G to an empty graph
     vector <graph> G;
 
+    // Resize the vector to have P (size = nodes_size) positions (so we can wright in every pos we want)
+    int size = nodes.size();
+    G.resize(size);
+
     // Vector Pf to keep every filter f, and the ids of all points matching filter f
     vector<fnode> Pf;
 
@@ -16,7 +20,6 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
     Pf.push_back(first_node);
 
 
-    int size = nodes.size();
     for(int i = 1; i < size; i++){
 
         // Check if filter already exists in Pf list
@@ -57,6 +60,16 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
 
             // Create a graph with only one node and no neighbors
             vector<vector<edge>> Gf(1);
+
+            // Take the only matching point
+            int point = Pf[i].matching_points[0];
+
+            // Add the filter to G graph
+            G[point].filter = Pf[i].filter;
+
+            // Transfer neighbors from Gf to G
+            G[point].neighbors = Gf[0];
+
             continue;
         }
 
@@ -66,7 +79,7 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
             vector<float> node = temp[Pf[i].matching_points[j]];
             pf_nodes.push_back(node);
 
-            // Match nodes from large dataset to nodes form small 
+            // Match nodes from small dataset to nodes of large dataset 
             pf_mapping.push_back(make_pair(j,Pf[i].matching_points[j]));
         }
 
@@ -83,16 +96,30 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
         }
 
         // If number of matching nodes for filter f is less than R_small, then set R_small to pfsize-1
+        vector<vector<edge>> Gf;
         if(pfsize <= R_small){
 
             // Create a graph for filter f nodes (with less neighbors per node)
             int R_size = pfsize - 1;
-            vector<vector<edge>> Gf = VamanaIndexing(pf_nodes,a,L_small,R_size,medoid);
+            Gf = VamanaIndexing(pf_nodes,a,L_small,R_size,medoid);
 
         }else{
 
             // Create a graph for filter f nodes
-            vector<vector<edge>> Gf = VamanaIndexing(pf_nodes,a,L_small,R_small,medoid);
+            Gf = VamanaIndexing(pf_nodes,a,L_small,R_small,medoid);
+        }
+
+
+        // Transfer Gf hypograph and filter to G graph
+        for(int j = 0; j < pfsize; j++){
+
+            int point = pf_mapping[j].second;
+
+            // Add the filter to G graph
+            G[point].filter = Pf[i].filter;
+
+            // Copy neighbors from Gf to G
+            G[point].neighbors = Gf[j];         
         }
     }
 
