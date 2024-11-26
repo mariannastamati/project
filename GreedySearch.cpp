@@ -1,13 +1,5 @@
-#include "FilteredGreedySearch.h"
+#include "GreedySearch.h"
 
-#include <cmath>
-#include <algorithm>
-#include <set>
-#include <vector>
-
-#include "graph.h"
-
-using namespace std;
 
 // Function to remove common elements
 vector<int> removeCommonElements(const vector<int>& visited, const vector<int>& neighbors_list){
@@ -22,33 +14,17 @@ vector<int> removeCommonElements(const vector<int>& visited, const vector<int>& 
     }
     return result;
 }
- 
 
-//Filtered Greedy Search
 
-pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
-   const vector<float>& query, 
-    int k, 
-    int L, 
-    const vector<vector<float>>& vectors,
-    const vector<vector<int>>& graph,
-    const vector<fnode>& filters) { 
+// Greedy Search Algorithm
+pair<vector<int>, vector<int>> GreedySearch(int medoid, const vector<float>& query, int k, int L, const vector<vector<float>>& vectors,
+const vector<vector<edge>>& graph){
 
-        vector<int> visited;              // Set for the nodes we have visited (empty)
-        vector<int> List ;      // Search list which we initialize with the start node 
+    vector<int> visited;              // Set for the nodes we have visited (empty)
+    vector<int> List = {medoid};      // Search list which we initialize with the start node 
     
+    vector<int> L_without_V = removeCommonElements(visited,List);   // L\V
 
-    // Iterate over medoids and filters, and add the node_id to List if it satisfies the filter
-       for (const auto& medoid : medoids) {
-        for (const auto& filter : filters) {
-            if (medoid.satisfiesFilter(filter.filter)) {
-                List.push_back(medoid.node_id);
-                break;
-            }
-        }
-    }
-
-    vector<int> L_without_V = removeCommonElements(visited, List);
     // While L\V != empty
     while(!L_without_V.empty()){
 
@@ -70,16 +46,9 @@ pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
         }
 
         // Update list <- list + (neighbors of p* (pstar))
-         for (const auto& e : graph[pstar]) {
-           if (find(List.begin(), List.end(), e) == List.end()){
-               // Check if the node passes the filter of any medoid
-                for (const auto& medoid : medoids) {
-                    if (medoid.filter==(vectors[e][0])) {
-                        List.push_back(e);
-                        break;
-                    }
-                }
-            }
+        for (const auto& e : graph[pstar]){
+            if(find(List.begin(), List.end(), e.first) == List.end())
+                List.push_back(e.first);
         }
 
         // Update visited <- visited + p* (pstar)
@@ -106,7 +75,5 @@ pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
     });
     List.resize(k); // We return only the k closest points
 
-
-   return make_pair(List, visited);
-
-    }
+    return make_pair(List, visited);
+}

@@ -24,3 +24,19 @@ void PrintMedoidMap(vector<Map> &M){
         cout << "{filter: " << M[i].filter << ", start_node: " << M[i].start_node << "}" << endl;
     }
 }
+
+
+// Function to print graph G (created from Filtered or Stitched Vamana)
+void PrintGraph(const vector<graph> &G){
+
+    for (size_t i = 0; i < G.size(); ++i) {
+        cout << "Node " << i << ":\n";
+        cout << "  Filter: " << G[i].filter << "\n";
+        cout << "  Neighbors: ";
+        
+        for (const auto& neighbor : G[i].neighbors) {
+            cout << "(" << neighbor.first << ", " << neighbor.second <<")"<< " ";
+        }
+        cout <<endl;
+    }
+}

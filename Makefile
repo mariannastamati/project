@@ -19,7 +19,7 @@ TARGET = executable
 ifeq ($(test),yes)
 	ARGS =
 else
-	ARGS = ../datasets2/dummy-data.bin ../datasets2/dummy-queries.bin 1.2 10 60 12 50
+	ARGS = ../datasets2/dummy-data.bin ../datasets2/dummy-queries.bin 1.2 10 70 12 50 60 8 5
 endif
 
 # Command line arguments for Valgrind
