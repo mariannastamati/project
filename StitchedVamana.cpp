@@ -123,5 +123,12 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
         }
     }
 
+    // For every node in Graph G, call FilteredRobustPrune to reduce max out-degrees in R_stitched
+    int V = G.size();
+    for(int v = 0; v < V; V++){
+
+        // Call FilteredRobustPrune for node v
+    }
+
     return G;
 }
