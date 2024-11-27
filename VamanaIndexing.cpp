@@ -1,16 +1,13 @@
 #include "VamanaIndexing.h"
 
 
-vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, int R, int& s){ 
+vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, float a, int L, int R, int& s){ 
 
     // Create and initialize a random R-regular directed graph
     vector<vector<edge>> Graph = CreateGraph(data, data.size(), R);
 
-    // Find Medoid on Graph
-    s = Medoid(data);
-
     // Sigma (σ) is a random permutation of points 1..n (data size = n = the points in the dataset)
-    vector<int> sigma = random_permutation(data);
+    vector<int> sigma = random_permutation1(data);
 
     int size = data.size();
     for(int i = 0; i < size; i++){
@@ -19,7 +16,6 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
         auto [K_neighbors, visited_nodes] = GreedySearch(s, data[sigma[i]], 1, L, data, Graph);
         
         // Call Robust Prune to update out-neighbors of σ[i] (sigma[i])
-        float a = 1.0;                       // Distance threshold a >= 1
         vector<int> V = visited_nodes;       // Visited nodes of sigma[i] from Greedy Search
 
         Graph = RobustPrune(sigma[i], V, a, R, Graph, data);
@@ -80,7 +76,7 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, int L, in
 
 
 // Function to create a random permutation of data
-vector<int> random_permutation(const vector<vector<float>>& data){
+vector<int> random_permutation1(const vector<vector<float>>& data){
 
     vector<int> s(data.size());
 

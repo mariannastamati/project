@@ -4,6 +4,11 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <random>
+#include <utility>
+#include <algorithm>
+#include <set>
+
 
 using namespace std;
 
@@ -26,5 +31,7 @@ struct graph{
 // Function to calculate Euclidean Distance
 double EuclideanDistance(const vector<float>& node1, const vector<float>& node2);
 
+// Creates a random R-regular directed graph (FOR VAMANA IN STITCHED VAMANA)
+vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, int R);
 
 #endif
