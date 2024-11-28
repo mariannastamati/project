@@ -6,7 +6,7 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
     // Initialize G to an empty graph
     vector <graph> G;
 
-    // Resize the vector to have P (size = nodes_size) positions (so we can wright in every pos we want)
+    // Resize the vector to have P (size = nodes_size) positions (so we can write in every pos we want)
     int size = nodes.size();
     G.resize(size);
 
@@ -121,6 +121,13 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
             // Copy neighbors from Gf to G
             G[point].neighbors = Gf[j];         
         }
+    }
+
+    // For every node in Graph G, call FilteredRobustPrune to reduce max out-degrees in R_stitched
+    int V = G.size();
+    for(int v = 0; v < V; V++){
+
+        // Call FilteredRobustPrune for node v
     }
 
     return G;
