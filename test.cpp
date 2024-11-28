@@ -195,7 +195,7 @@ void CleanData_1(){
     cout << "Vector size without timestamp: " << points[0].size() << endl;
 
     // Size of vector must be 2 
-    TEST_ASSERT(points[0].size()==2);
+    TEST_ASSERT(points[0].size() == (long unsigned int) 2);
 }
 
 
@@ -221,7 +221,7 @@ void CleanQueries_1(){
     cout << "Vectors of vector size without timestamp elements: " << points[0].size() << endl;
 
     // Size of vector must be 3 and every vector must have size = 5
-    TEST_ASSERT((points.size()==3) && (points[0].size()==5));     
+    TEST_ASSERT((points.size() == (long unsigned int) 3) && (points[0].size() == (long unsigned int) 5));     
 }
 
 
@@ -255,7 +255,7 @@ void RemoveFilters_1(){
     }
 
     // Every vector size must be 6
-    TEST_ASSERT(points[0].size()==6);  
+    TEST_ASSERT(points[0].size() == (long unsigned int) 6);  
 }
 
 
@@ -332,7 +332,7 @@ void RandomPoints_1(){
     }
 
     // Random points must be 3 in size
-    TEST_ASSERT(rand_points.size()==3);  
+    TEST_ASSERT(rand_points.size() == (long unsigned int) 3);  
 }
 
 
@@ -362,7 +362,7 @@ void FindMedoid_1(){
     PrintMedoidMap(STf);
 
     // Medoid map must have 3 start points (one start point per filter)
-    TEST_ASSERT(STf.size()==3); 
+    TEST_ASSERT(STf.size() == (long unsigned int) 3); 
 }
 
 
