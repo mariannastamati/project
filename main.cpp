@@ -7,6 +7,7 @@
 #include "io.h"
 #include "print.h"
 #include "cleandata.h"
+#include "groundtruth.h"
 #include "FilteredVamana.h"
 #include "StitchedVamana.h"
 
@@ -66,6 +67,9 @@ int main(int argc, char **argv){
     CleanQueries(queries);
     cout << "Num of queries: " << queries.size() << endl << endl;
 
+    // Generate groundtruth file for queries
+    generateGroundTruth(queries,nodes,k);
+
     // Vector to keep the start node for every filter
     vector<Map> STf;
 
@@ -78,6 +82,7 @@ int main(int argc, char **argv){
     cout << "Running Stitched Vamana..." << endl;
     vector <graph> G_Stitched = StitchedVamana(nodes,a,L_small,R_small,R_stitched,STf);
     cout << "Complete. Stitched Vamana Graph created" << endl << endl;
+    
     
     
     return 0;
