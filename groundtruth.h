@@ -62,7 +62,6 @@ void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &
     }
     // -----------------------------------------------------------
 
-
     // For every query in queries
     int size = queries.size();
     for(int i = 0; i < size; i++){
@@ -70,21 +69,33 @@ void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &
         // If query_type = 0 (unfiltered) check for neighbors in all data points
         if(queries[i][0] == 0){
 
+            vector<pair<int, float>> List;
+
             for(int j = 0 ; j < datasize; j++){
 
                 // Calculate distance between query and every point in dataset
                 float dist = EuclideanDistance(clean_q[i],clean_d[j]);
 
                 // Add distance to the distance list
+                List.push_back(make_pair(j,dist));
             }
 
             // Keep k nearest neighbors
+            sort(List.begin(), List.end(), [](pair<int, float> a, pair<int, float> b) {return a.second < b.second;});
+            List.resize(k); // We return only the k closest points
 
+            // Write to file
+            for(int j = 0; j < k; j++){
+                file << List[j].first << " ";
+            }
+            file << endl;
         }
         
 
         // If query_type = 1 (filtered) check for neighbors only in points with the same filter
         if(queries[i][0] == 1){
+
+            vector<pair<int, float>> List;
 
             // Find in Pf list the same filter as query
             int pfsize = Pf.size();
@@ -93,8 +104,18 @@ void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &
                 // If filter is the same, then check for nearest neighbors only in matching nodes
                 if(Pf[j].filter == queries[i][1]){
 
-                    vector<int> matching_p = Pf[i].matching_points;
+                    vector<int> matching_p = Pf[j].matching_points;
                     int mp_size = matching_p.size();
+
+                    if(mp_size <= k)
+                    {
+                        for(int l = 0; l < mp_size; l++){
+                            file << matching_p[l] << " ";
+                        }
+                        file << endl;
+                        continue;
+                    }
+
                     for(int l = 0; l < mp_size; l++){
 
                         // Calculate distance between query and every point in matching points
@@ -102,23 +123,23 @@ void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &
                         float dist = EuclideanDistance(clean_q[i],m_point);
 
                         // Add distance to the distance list
+                        List.push_back(make_pair(l,dist));
                     }
 
-                    // If matching points is less than k, then keep mp_size nearest neighbors
-                    int kn = k;
-                    if(mp_size < k){
-                        kn = mp_size;
-                    }
+                    // Keep k nearest neighbors
+                    sort(List.begin(), List.end(), [](pair<int, float> a, pair<int, float> b) {return a.second < b.second;});
+                    List.resize(k); // We return only the k closest points
 
-                    // Keep nearest neighbors
+                    // Write to file
+                    for(int j = 0; j < k; j++){
+                        file << List[j].first << " ";
+                    }
+                    file << endl;
 
                     break; // Found: Break and move to the next query
                 }
             } 
         }
-
-        // Write true neighbors in file
-        file << "This is the ground truth data." << endl;
     }
 
     file.close();
