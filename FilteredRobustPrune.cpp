@@ -1,10 +1,14 @@
 #include "FilteredRobustPrune.h"
 #include "graph.h"
+#include "cleandata.h"
 
 vector <graph> FilteredRobustPrune(int currentPoint, vector<int>& visited_nodes, float a, int R, vector<graph>& G, const vector<vector<float>>& data)
 {
     vector<int> N_out; // Stores the selected neighbors for the current node
     vector<int> previous_neighbors; // Stores unvisited neighbors of the current node
+
+    vector<vector<float>> adjusted_data = data;
+    RemoveFilters(adjusted_data);
 
     // Add all unvisited neighbors of the current node to previous_neighbors
     for (const auto& edge : G[currentPoint].neighbors)
@@ -14,6 +18,7 @@ vector <graph> FilteredRobustPrune(int currentPoint, vector<int>& visited_nodes,
             previous_neighbors.push_back(edge.first);
         }
     }
+
 
     // Remove the current node from the list of visited nodes
     visited_nodes.erase(remove(visited_nodes.begin(), visited_nodes.end(), currentPoint), visited_nodes.end());
@@ -32,7 +37,7 @@ vector <graph> FilteredRobustPrune(int currentPoint, vector<int>& visited_nodes,
         // Find the closest node in visited_nodes to currentPoint
         for (int i = 0; i < size; i++)
         {
-            double dist = EuclideanDistance(data[visited_nodes[i]], data[currentPoint]);
+            double dist = EuclideanDistance(adjusted_data[visited_nodes[i]], adjusted_data[currentPoint]);
             if (dist < min_distance)
             {
                 min_distance = dist;
@@ -43,7 +48,7 @@ vector <graph> FilteredRobustPrune(int currentPoint, vector<int>& visited_nodes,
         N_out.push_back(p_star); // Add the closest node to N_out
 
         // Stop if the out-degree limit R is reached
-        if (N_out.size() == R)
+        if (N_out.size() == static_cast<size_t>(R))
         {
             break;
         }
@@ -59,13 +64,13 @@ vector <graph> FilteredRobustPrune(int currentPoint, vector<int>& visited_nodes,
             int p_prime = visited_nodes[i];
             
             // Check if filters intersect; if not, skip this node
-            if (G[p_prime].filter != G[p_star].filter)
+            if ((G[p_prime].filter != G[p_star].filter) && (G[currentPoint].filter == G[p_prime].filter))
             {
                 continue; // Skip nodes with non-overlapping filters
             }
 
-            double dist_p_star = EuclideanDistance(data[p_star], data[p_prime]);
-            double dist_p = EuclideanDistance(data[currentPoint], data[p_prime]);
+            double dist_p_star = EuclideanDistance(adjusted_data[p_star], adjusted_data[p_prime]);
+            double dist_p = EuclideanDistance(adjusted_data[currentPoint], adjusted_data[p_prime]);
 
             // Remove node if it violates the condition
             if (a * dist_p_star <= dist_p)
@@ -80,7 +85,7 @@ vector <graph> FilteredRobustPrune(int currentPoint, vector<int>& visited_nodes,
     for (size_t i = 0; i < N_out.size(); i++)
     {
         int neighbor = N_out[i];
-        double distance = EuclideanDistance(data[currentPoint], data[neighbor]);
+        double distance = EuclideanDistance(adjusted_data[currentPoint], adjusted_data[neighbor]);
 
         G[currentPoint].neighbors.emplace_back(neighbor, distance); // Add new neighbors
     }
