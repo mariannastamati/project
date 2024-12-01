@@ -127,7 +127,7 @@ void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &
                         float dist = EuclideanDistance(clean_q[i],m_point);
 
                         // Add distance to the distance list
-                        List.push_back(make_pair(l,dist));
+                        List.push_back(make_pair(matching_p[l],dist));
                     }
 
                     // Keep k nearest neighbors

@@ -68,7 +68,7 @@ int main(int argc, char **argv){
     cout << "Num of queries: " << queries.size() << endl << endl;
 
     // Generate groundtruth file for queries (for 100 nearest neighbors)
-    generateGroundTruth(queries,nodes,100);
+    //generateGroundTruth(queries,nodes,100);
 
     // Vector to keep the start node for every filter
     vector<Map> STf;
