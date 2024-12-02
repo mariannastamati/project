@@ -119,15 +119,42 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
             G[point].filter = Pf[i].filter;
 
             // Copy neighbors from Gf to G
-            G[point].neighbors = Gf[j];         
+            // Find the matching node of neighbor (from small dataset to large)
+            vector<edge> gf_neighbors = Gf[j];
+            vector<edge> g_neighbors;           // Vector to keep the real neighbors
+            for(size_t t = 0; t < gf_neighbors.size(); t++){
+
+                for (const auto& pair : pf_mapping){
+                    if (pair.first == gf_neighbors[t].first){
+
+                        int real_neighbor = pair.second;
+                        float dist = gf_neighbors[t].second;
+                        g_neighbors.push_back(make_pair(real_neighbor,dist));
+
+                        break;
+                    }
+                }
+            }
+
+            // Add the real neighbors to G graph
+            G[point].neighbors = g_neighbors;        
         }
     }
 
-    // For every node in Graph G, call FilteredRobustPrune to reduce max out-degrees in R_stitched
+    // For every node in Graph G, call FilteredRobustPrune to reduce max out-degrees to R_stitched
     int V = G.size();
-    for(int v = 0; v < V; V++){
+    for(int v = 0; v < V; v++){
+
+        vector<edge> neighbors = G[v].neighbors;
+        int ns = neighbors.size();
+        vector<int> n_out;
+        for(int i = 0; i < ns; i++){
+
+            n_out.push_back(neighbors[i].first);
+        }
 
         // Call FilteredRobustPrune for node v
+        G = FilteredRobustPrune(v, n_out, a, R_stitched, G, nodes);
     }
 
     return G;
