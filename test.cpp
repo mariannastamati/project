@@ -548,7 +548,8 @@ void StitchedVamana_1(){
 
     vector <graph> G_stitched = StitchedVamana(data, a, L_small, R_small, R_stitched, STf);
 
-    cout << endl << " Max out-neighbors for every node must be <= 3 (R_stitched = 3)" << endl;;
+    cout << endl << " Max out-neighbors for every node must be <= 3 (R_stitched = 3)" << endl;
+    PrintGraph(G_stitched);
 
     // Check the size of neighbors in every node
     bool flag = 0;
