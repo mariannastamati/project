@@ -406,6 +406,7 @@ void FilteredRobustPrune_Test_1(){
     TEST_ASSERT(G[0].neighbors.size() == 1); // Should be pruned to 1 neighbor
 }
 
+
 /* Test 2 - No Pruning */
 void FilteredRobustPrune_Test_2(){
     // Setup graph with no neighbors for the current point
@@ -434,6 +435,7 @@ void FilteredRobustPrune_Test_2(){
     // Ensure no changes happened (0 neighbors for node 0)
     TEST_ASSERT(G[0].neighbors.size() == 0); // No neighbors to prune
 }
+
 
 /* Test 3 - Pruning with Filter Difference */
 void FilteredRobustPrune_Test_3(){
@@ -480,6 +482,7 @@ void FilteredRobustPrune_Test_3(){
     TEST_ASSERT(!found_invalid_neighbor); // Node 0 should not have node 2 as a neighbor
 }
 
+
 /* Test 4 - Edge Distance Check */
 void FilteredRobustPrune_Test_4(){
     // Setup graph with nodes and distances
@@ -512,6 +515,56 @@ void FilteredRobustPrune_Test_4(){
     // Ensure correct neighbors after pruning
     TEST_ASSERT(G[0].neighbors.size() == 1); // Should prune to 1 neighbor, delete node 1 and 3 as neighbors because distance greater than 1.0
 }
+
+
+// ------------ STITCHED VAMANA ALGORITHM ------------
+void StitchedVamana_1(){
+
+    // Setup dataset with 2 different filters
+    vector<vector<float>> data = {
+        {1.0, 1.0, 1.0}, // 0 
+        {1.0, 2.0, 2.0}, // 1
+        {1.0, 3.0, 2.0}, // 2
+        {1.0, 6.0, 2.0}, // 3
+        {1.0, 8.0, 2.0}, // 4
+        {1.0, 5.0, 9.3}, // 5
+        {2.0, 3.0, 3.0}, // 6
+        {2.0, 5.0, 5.0}, // 7
+        {2.0, 3.8, 2.1}, // 8
+        {2.0, 3.9, 3.0}, // 9
+        {2.0, 5.0, 5.2}, // 10
+        {2.0, 7.0, 2.1}  // 11
+    };
+
+    float a = 1.2;
+    int L_small = 10;
+    int R_small = 4;
+    int R_stitched = 3;
+
+    vector<Map> STf = {
+        {1.0, 2},
+        {2.0, 9}
+    };
+
+    vector <graph> G_stitched = StitchedVamana(data, a, L_small, R_small, R_stitched, STf);
+
+    cout << endl << " Max out-neighbors for every node must be <= 3 (R_stitched = 3)" << endl;;
+
+    // Check the size of neighbors in every node
+    bool flag = 0;
+    for(size_t i = 0; i < G_stitched.size(); i++){
+
+        int ns = G_stitched[i].neighbors.size();
+        if(ns > R_stitched){
+            flag = 1;
+        }
+    }
+
+    // Max out-neighbors for every node must be <= R_stitched
+    TEST_ASSERT(flag == 0); 
+}
+
+
 
 
 /* Test Main */
@@ -555,10 +608,13 @@ TEST_LIST = {
     {"Find Medoid", FindMedoid_1},
 
     // Filtered Robust Prune Tests
-    {"Filtered Robust Prune Test 1", FilteredRobustPrune_Test_1},
-    {"Filtered Robust Prune Test 2", FilteredRobustPrune_Test_2},
-    {"Filtered Robust Prune Test 3", FilteredRobustPrune_Test_3},
-    {"Filtered Robust Prune Test 4", FilteredRobustPrune_Test_4},
+    {"Filtered Robust Prune (test 1)", FilteredRobustPrune_Test_1},
+    {"Filtered Robust Prune (test 2)", FilteredRobustPrune_Test_2},
+    {"Filtered Robust Prune (test 3)", FilteredRobustPrune_Test_3},
+    {"Filtered Robust Prune (test 4)", FilteredRobustPrune_Test_4},
+
+    //Stitched Vamana Tests
+    {"Stitched Vamana Algorithm", StitchedVamana_1},
     
 
     {NULL, NULL}
