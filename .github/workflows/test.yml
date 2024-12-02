@@ -3,7 +3,7 @@ name: Run Tests
 on:
   push:  # Run tests only when: push
     branches:
-      - vamana    # Vamana branch
+      - main    # Main branch
 
 jobs:
   run-tests:
