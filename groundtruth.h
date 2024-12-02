@@ -99,10 +99,14 @@ void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &
 
             // Find in Pf list the same filter as query
             int pfsize = Pf.size();
+            bool found = 0;         // Filter not found yet
             for(int j = 0; j < pfsize; j++){
 
                 // If filter is the same, then check for nearest neighbors only in matching nodes
                 if(Pf[j].filter == queries[i][1]){
+
+                    // Filter found, set found to 1
+                    found = 1;
 
                     vector<int> matching_p = Pf[j].matching_points;
                     int mp_size = matching_p.size();
@@ -123,7 +127,7 @@ void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &
                         float dist = EuclideanDistance(clean_q[i],m_point);
 
                         // Add distance to the distance list
-                        List.push_back(make_pair(l,dist));
+                        List.push_back(make_pair(matching_p[l],dist));
                     }
 
                     // Keep k nearest neighbors
@@ -138,7 +142,12 @@ void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &
 
                     break; // Found: Break and move to the next query
                 }
-            } 
+            }
+
+            // If filter not found write nothing (for no neighbors)
+            if(found == 0){
+                file << endl;
+            }
         }
     }
 
