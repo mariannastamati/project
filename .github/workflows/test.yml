@@ -1,0 +1,22 @@
+name: Run Tests
+
+on:
+  push:  # Run tests only when: push
+    branches:
+      - vamana    # Vamana branch
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up build tools
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential
+
+    - name: Build and run tests
+      run: make test=yes run
