@@ -3,6 +3,8 @@
 
 #include "medoid.h"
 #include "cleandata.h"
+#include "FilteredGreedySearch.h"
+#include "FilteredRobustPrune.h"
 #include "print.h"
 
 
