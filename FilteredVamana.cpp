@@ -33,56 +33,54 @@ vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int 
         // Find the start node of filter of σ[i]
         int currentPoint = sigma[i];
         float currentFilter = nodes[currentPoint][0];
-        int startNode = findStartNodeFromFilter(STf, currentFilter);
 
         // Call Filtered Greedy Search
-        //  auto [K_neighbors, visited_nodes] = FilteredGreedySearch(STf, temp[currentPoint], 0, L, temp, G, currentFilter);
-        // (void) K_neighbors;
+        auto [K_neighbors, visited_nodes] = FilteredGreedySearch(STf, temp[currentPoint], 0, L, temp, G, currentFilter);
+        (void) K_neighbors;
 
         // Call Filtered Robust Pune to update out-neighbors of σ[i]
-        // G = FilteredRobustPrune(currentPoint, visited_nodes, a, R, G, nodes);
+        G = FilteredRobustPrune(currentPoint, visited_nodes, a, R, G, nodes);
 
         // For every Neighbor j of sigma[i]
-        //vector<edge> nb = G[sigma[i]].neighbors;
-        //Vsize = nb.size();
-        //for(int j = 0; j < Vsize; j++){
+        vector<edge> nb = G[sigma[i]].neighbors;
+        int Vsize = nb.size();
+        for(int j = 0; j < Vsize; j++){
 
-        //    int NearNeighbor = nb[j].first;
-
-        //    int NNsize = G[NearNeighbor].neighbors.size(); 
+            int NearNeighbor = nb[j].first;
+            vector<edge> &jneighbors = G[NearNeighbor].neighbors;
+            int NNsize = jneighbors.size(); 
 
             // Checking if sigma[i] already exists in the Nearest Neighbor j
-        //    bool exists = false;
-        //    for(int k = 0; k < NNsize; k++){
+            bool exists = false;
+            for(int k = 0; k < NNsize; k++){
                    
-        //        if(nb[k].first == sigma[i])
-        //        {
-        //            exists = true;
-        //            break;
-        //        }
-
-        //    }
+                if(jneighbors[k].first == sigma[i])
+                {
+                   exists = true;
+                   break;
+                }
+            }
 
             // If it doesn't already exists add sigma[i] in the neighbors of NearNeighbor
-            //if(exists == false){
+            if(exists == false){
 
-            //  float distance = EuclideanDistance(temp[NearNeighbor],temp[sigma[i]]);
-            //  G[NearNeighbor].neighbors.emplace_back(sigma[i], distance);
-            //} 
+                float distance = EuclideanDistance(temp[NearNeighbor],temp[sigma[i]]);
+                G[NearNeighbor].neighbors.emplace_back(sigma[i], distance);
+            } 
 
-            //int nnsize = G[NearNeighbor].neighbors.size();
-            //if(nnsize > R){
+            int nnsize = G[NearNeighbor].neighbors.size();
+            if(nnsize > R){
 
-                    // Run Filtered Robust Prune to update out-neighbors of j
-                    //vector<int> nb_nodes;
-                    //for(int l = 0; l < Vsize; l++){
+                // Run Filtered Robust Prune to update out-neighbors of j
+                vector<int> nb_nodes;
+                for(int l = 0; l < nnsize; l++){
 
-                        //nb_nodes.emplace_back(nb[l].first);
-                    //}
-                    // G = FilteredRobustPrune(j, nb_nodes, a, R, G, nodes);
-            //}
+                    nb_nodes.emplace_back(jneighbors[l].first);
+                }
 
-        //}
+                G = FilteredRobustPrune(j, nb_nodes, a, R, G, nodes);
+            }
+        }
     }
 
     return G;
