@@ -1,13 +1,4 @@
 #include "FilteredGreedySearch.h"
-#include <fstream>
-#include <iostream>
-
-#include <cmath>
-#include <algorithm>
-#include <set>
-#include <vector>
-
-#include "graph.h"
 
 using namespace std;
 
@@ -26,33 +17,43 @@ inline vector<int> removeCommonElements(const vector<int>& visited, const vector
     return result;
 }
 
-    
- 
 
 //Filtered Greedy Search
-
 pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
-   const vector<float>& query, 
+    const vector<float>& query, 
     int k, 
     int L, 
     const vector<vector<float>>& vectors,
     const vector<graph>& graph,
-    const float filter) { 
+    const float filter){ 
 
-        vector<int> visited;              // Set for the nodes we have visited (empty)
-        vector<int> List ;      // Search list which we initialize with the start node 
+
+    vector<int> visited;        // Set for the nodes we have visited (empty)
+    vector<int> List;           // Search list which we initialize with the start node 
     
-     //graph[1].
-    // Iterate over medoids and filters, and add the node_id to List if it satisfies the filter
-       for (const auto& medoid : medoids) {
-        
+    // If filter > -1 then we have filtered query
+    if(filter > -1){
+
+        // Iterate over medoids and filters, and add the node_id to List if it satisfies the filter
+        for (const auto& medoid : medoids){
+            
             if(medoid.filter==filter){ 
-             List.push_back(medoid.start_node);
-            }
-           
+                List.push_back(medoid.start_node);
+            }       
+        }
+
+    // Else we have unfiltered query (search in every node with every filter)
+    }else{
+
+        // Iterate over medoids and filters, and add all the start nodes in search list L
+        for (const auto& medoid : medoids){
+            
+            List.push_back(medoid.start_node);    
+        }
     }
 
     vector<int> L_without_V = removeCommonElements(visited, List);
+
     // While L\V != empty
     while(!L_without_V.empty()){
 
@@ -73,18 +74,36 @@ pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
             }
         }
 
-        // Update list <- list + (neighbors of p* (pstar))
-        for (const auto& e : graph[pstar].neighbors) {
-            int neighbor_id = e.first; // Get the node_id from the edge pair
-
-         // Check if the node passes the filter and has not been visited
-          if (vectors[neighbor_id][0] == filter && find(visited.begin(), visited.end(), neighbor_id) == visited.end()) {
-             List.push_back(neighbor_id); // Add the node to List
-          }
-       }
-
         // Update visited <- visited + p* (pstar)
-        visited.push_back(pstar);
+        if(find(visited.begin(), visited.end(), pstar) == visited.end()){
+            visited.push_back(pstar);
+        }
+
+        // Update list <- list + (neighbors of p* (pstar))
+        for (const auto& e : graph[pstar].neighbors){
+
+            // Get the node_id from the edge pair
+            int neighbor_id = e.first;     
+
+            // If query is filtered, check filters
+            if(filter > -1){
+
+                // Check if the node has the same filter as query and has not been visited
+                if ((graph[neighbor_id].filter == filter) && (find(visited.begin(), visited.end(), neighbor_id) == visited.end())
+                && (find(List.begin(), List.end(), neighbor_id) == List.end())){
+                    
+                    List.push_back(neighbor_id); // Add the node to List
+                }
+
+            // If query is unfiltered don't check in filters
+            }else{
+
+                if((find(visited.begin(), visited.end(), neighbor_id) == visited.end())
+                && (find(List.begin(), List.end(), neighbor_id) == List.end())){
+                    List.push_back(neighbor_id); // Add the node to List
+                }
+            }
+        }
 
         // Checking if List_size is greater than L
         int Lsize = List.size();
@@ -101,13 +120,18 @@ pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
         L_without_V = removeCommonElements(visited,List);
     }
 
-
+    // Sort closest points in L and keep only k closest
     sort(List.begin(), List.end(), [&query, &vectors](int a, int b){
         return EuclideanDistance(vectors[a], query) < EuclideanDistance(vectors[b], query);
     });
-    List.resize(k); // We return only the k closest points
 
+    // If List size is greater than k return only k, else return the whole list
+    int Lsize = List.size();
+    if(Lsize > k){
 
-   return make_pair(List, visited);
-
+        List.resize(k); // We return only the k closest points
     }
+
+    // Return result
+    return make_pair(List, visited);
+}
