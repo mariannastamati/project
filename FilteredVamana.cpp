@@ -36,11 +36,11 @@ vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int 
         int startNode = findStartNodeFromFilter(STf, currentFilter);
 
         // Call Filtered Greedy Search
-        //  auto [K_neighbors, visited_nodes] = FilteredGreedySearch(startNode, temp[currentPoint], 0, L, currentFilter, temp, G);
+        //  auto [K_neighbors, visited_nodes] = FilteredGreedySearch(STf, temp[currentPoint], 0, L, temp, G, currentFilter);
         // (void) K_neighbors;
 
         // Call Filtered Robust Pune to update out-neighbors of σ[i]
-        // G = FilteredRobustPrune(currentPoint, visited_nodes, a, R);
+        // G = FilteredRobustPrune(currentPoint, visited_nodes, a, R, G, nodes);
 
         // For every Neighbor j of sigma[i]
         //vector<edge> nb = G[sigma[i]].neighbors;
@@ -79,7 +79,7 @@ vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int 
 
                         //nb_nodes.emplace_back(nb[l].first);
                     //}
-                    // G = FilteredRobustPrune(j, nb_nodes, a, R);
+                    // G = FilteredRobustPrune(j, nb_nodes, a, R, G, nodes);
             //}
 
         //}

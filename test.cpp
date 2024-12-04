@@ -3,6 +3,7 @@
 #include "FilteredVamana.h"
 #include "StitchedVamana.h"
 #include "FilteredRobustPrune.h"
+#include "FilteredGreedySearch.h"
 #include "graph.h"
 
 using namespace std;
@@ -517,6 +518,222 @@ void FilteredRobustPrune_Test_4(){
 }
 
 
+// ------------ FILTERED GREEDY SEARCH FUNCTION ------------
+
+/* Test 1 - Just testing if Greedy finds the wright k neighbors (all same filters)*/
+void FilteredGreedySearch_Test_1() {
+  vector<vector<float>> points = {
+        {1.0, 2.0},
+        {2.0, 1.0},
+        {0.0, 2.0},
+        {1.0, 1.0},
+        {1.0, 0.0}
+    };
+
+    vector<graph> G(5);
+
+    // Add neighbors
+    G[0].neighbors.push_back({1, 1.5});
+    G[0].neighbors.push_back({2, 2.9});
+    G[1].neighbors.push_back({0, 1.3});
+    G[2].neighbors.push_back({0, 2.6});
+    G[2].neighbors.push_back({4, 1.5});
+    G[3].neighbors.push_back({1, 3.5});
+    G[3].neighbors.push_back({2, 4.5});
+    G[4].neighbors.push_back({0, 2.5});
+    G[4].neighbors.push_back({2, 1.5});
+
+    // Filters for the nodes
+    G[0].filter = 1.0;
+    G[1].filter = 1.0;
+    G[2].filter = 1.0;
+    G[3].filter = 1.0;
+    G[4].filter = 1.0;
+
+    vector<Map> medoids = {  {1.0, 3} };      // Start search at node for filter 1.0 is 3
+    vector<float> q = {0.0, 0.0};             // Using query point different from the points of vector
+    float query_filter = 1.0;                 // Filter of query point
+    int k = 2;
+    int L = 4;
+
+   auto [K_neighbors, visited_nodes] = FilteredGreedySearch(medoids, q, k, L, points, G, query_filter);
+
+    cout << "\nGreedy search result:" << endl;
+    print(K_neighbors, visited_nodes);
+
+    // 2 nearest neighbors to q must be points[3] and points[4]
+    TEST_ASSERT(K_neighbors.size() == 2);
+}
+
+
+/* Test 2 - Testing if Greedy finds the wright k neighbors (different filters)*/
+void FilteredGreedySearch_Test_2() {
+  vector<vector<float>> points = {
+        {1.0, 2.0},
+        {2.0, 1.0},
+        {0.0, 2.0},
+        {1.0, 1.0},
+        {1.0, 0.0}
+    };
+
+    vector<graph> G(5);
+
+    // Add neighbors
+    G[0].neighbors.push_back({1, 1.5});
+    G[0].neighbors.push_back({2, 2.9});
+    G[1].neighbors.push_back({0, 1.3});
+    G[2].neighbors.push_back({0, 2.6});
+    G[2].neighbors.push_back({4, 1.5});
+    G[3].neighbors.push_back({1, 3.5});
+    G[3].neighbors.push_back({2, 4.5});
+    G[4].neighbors.push_back({0, 2.5});
+    G[4].neighbors.push_back({2, 1.5});
+
+    // Filters for the nodes
+    G[0].filter = 1.0;
+    G[1].filter = 1.0;
+    G[2].filter = 1.0;
+    G[3].filter = 1.0;
+    G[4].filter = 2.0;      // Different filter
+
+    vector<Map> medoids = {
+        {1.0, 3},            // Start search at node for filter 1.0 is 3
+        {2.0, 4}
+    };    
+    
+    vector<float> q = {0.0, 0.0};             // Using query point different from the points of vector
+    float query_filter = 1.0;                 // Filter of query point
+    int k = 2;
+    int L = 8;
+
+   auto [K_neighbors, visited_nodes] = FilteredGreedySearch(medoids, q, k, L, points, G, query_filter);
+
+    cout << "\nGreedy search result:" << endl;
+    print(K_neighbors, visited_nodes);
+
+    cout << "NOTE: Node 4 has different filter from query and should NOT be visited" << endl;
+
+    // points[3] should exists in k=2 nearest neighbors BUT NOT points[4]
+    TEST_ASSERT(K_neighbors.size() == 2);
+}
+
+
+/* Test 3 - Testing if Greedy finds the wright k neighbors (unfiltered query, query point exists in dataset)*/
+void FilteredGreedySearch_Test_3() {
+  vector<vector<float>> points = {
+        {1.0, 2.0},
+        {2.0, 1.0},
+        {0.0, 2.0},
+        {1.0, 1.0},
+        {1.0, 0.0},
+        {5.0, 8.0},
+        {0.0, 0.0}
+    };
+
+    vector<graph> G(7);
+
+    // Add neighbors
+    G[0].neighbors.push_back({1, 1.5});
+    G[0].neighbors.push_back({2, 2.9});
+    G[1].neighbors.push_back({0, 1.3});
+    G[2].neighbors.push_back({0, 2.6});
+    G[2].neighbors.push_back({4, 1.5});
+    G[3].neighbors.push_back({1, 3.5});
+    G[3].neighbors.push_back({2, 4.5});
+    G[4].neighbors.push_back({0, 2.5});
+    G[4].neighbors.push_back({2, 1.5});
+    G[5].neighbors.push_back({6, 8.0});
+    G[6].neighbors.push_back({5, 8.0});
+
+    // Filters for the nodes
+    G[0].filter = 1.0;
+    G[1].filter = 1.0;
+    G[2].filter = 1.0;
+    G[3].filter = 1.0;
+    G[4].filter = 2.0;      // Different filter
+    G[5].filter = 3.0;      // Different filter
+    G[6].filter = 3.0;
+
+    // Medoid map for filters
+    vector<Map> medoids = {
+        {1.0, 3},
+        {2.0, 4},
+        {3.0, 5}
+    };      
+
+    vector<float> q = {0.0, 0.0};             // Query point
+    float query_filter = -1.0;                // Filter of query point
+    int k = 4;
+    int L = 6;
+
+   auto [K_neighbors, visited_nodes] = FilteredGreedySearch(medoids, q, k, L, points, G, query_filter);
+
+    cout << "\nGreedy search result:" << endl;
+    print(K_neighbors, visited_nodes);
+
+    // points[6] must be the first nearest neighbor (the same as query)
+    TEST_ASSERT(K_neighbors.size() == 4);
+}
+
+
+/* Test 4 - Testing if Greedy finds the wright k neighbors (unfiltered query, query point doesn't exists in dataset)*/
+void FilteredGreedySearch_Test_4() {
+  vector<vector<float>> points = {
+        {1.0, 2.0},
+        {2.0, 1.0},
+        {0.0, 2.0},
+        {1.0, 1.0},
+        {1.0, 0.0},
+        {5.0, 8.0},
+        {9.0, 9.0}
+    };
+
+    vector<graph> G(7);
+
+    // Add neighbors
+    G[0].neighbors.push_back({1, 1.5});
+    G[0].neighbors.push_back({2, 2.9});
+    G[1].neighbors.push_back({0, 1.3});
+    G[2].neighbors.push_back({0, 2.6});
+    G[2].neighbors.push_back({4, 1.5});
+    G[3].neighbors.push_back({1, 3.5});
+    G[3].neighbors.push_back({2, 4.5});
+    G[4].neighbors.push_back({0, 2.5});
+    G[4].neighbors.push_back({2, 1.5});
+    G[5].neighbors.push_back({6, 8.0});
+    G[6].neighbors.push_back({5, 8.0});
+
+    // Filters for the nodes
+    G[0].filter = 1.0;
+    G[1].filter = 1.0;
+    G[2].filter = 1.0;
+    G[3].filter = 1.0;
+    G[4].filter = 2.0;      // Different filter
+    G[5].filter = 3.0;      // Different filter
+    G[6].filter = 3.0;
+
+    // Medoid map for filters
+    vector<Map> medoids = {
+        {1.0, 3},
+        {2.0, 4},
+        {3.0, 5}
+    };      
+
+    vector<float> q = {0.0, 0.0};             // Query point that doesn't exists in dataset
+    float query_filter = -1.0;                // Filter of query point
+    int k = 4;
+    int L = 6;
+
+   auto [K_neighbors, visited_nodes] = FilteredGreedySearch(medoids, q, k, L, points, G, query_filter);
+
+    cout << "\nGreedy search result:" << endl;
+    print(K_neighbors, visited_nodes);
+
+    // points[3] and points[4] must be the first nearest neighbors
+    TEST_ASSERT(K_neighbors.size() == 4);
+}
+
+
 // ------------ STITCHED VAMANA ALGORITHM ------------
 void StitchedVamana_1(){
 
@@ -613,6 +830,12 @@ TEST_LIST = {
     {"Filtered Robust Prune (test 2)", FilteredRobustPrune_Test_2},
     {"Filtered Robust Prune (test 3)", FilteredRobustPrune_Test_3},
     {"Filtered Robust Prune (test 4)", FilteredRobustPrune_Test_4},
+
+    // Filtered Greedy Search Tests
+    {"Filtered Greedy Search (test 1)", FilteredGreedySearch_Test_1},
+    {"Filtered Greedy Search (test 2)", FilteredGreedySearch_Test_2},
+    {"Filtered Greedy Search (test 3)", FilteredGreedySearch_Test_3},
+    {"Filtered Greedy Search (test 4)", FilteredGreedySearch_Test_4},
 
     //Stitched Vamana Tests
     {"Stitched Vamana Algorithm", StitchedVamana_1},
