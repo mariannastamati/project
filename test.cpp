@@ -4,6 +4,7 @@
 #include "StitchedVamana.h"
 #include "FilteredRobustPrune.h"
 #include "graph.h"
+#include "FilteredGreedySearch.h"
 
 using namespace std;
 
@@ -517,6 +518,46 @@ void FilteredRobustPrune_Test_4(){
 }
 
 
+/* Test 1 - Single medoid with direct neighbors */
+void FilteredGreedySearch_Test_1() {
+    vector<vector<float>> data = {
+        {1.0, 1.0, 2.0},  // Node 0
+        {2.0, 2.0, 3.0},  // Node 1
+        {3.0, 3.0, 2.0},  // Node 2
+        {4.0, 4.0, 3.0}   // Node 3
+    };
+
+    vector<graph> G(4);
+
+    // Add neighbors
+    G[0].neighbors.push_back({1, 1.570});
+    G[0].neighbors.push_back({2, 2.984});
+    G[1].neighbors.push_back({0, 1.348});
+    G[2].neighbors.push_back({0, 2.620});
+
+    // Filters for the nodes
+    G[0].filter = 1.0;
+    G[1].filter = 1.0;
+    G[2].filter = 1.0;
+    G[3].filter = 2.0;
+
+    vector<Map> medoids = {  {1.0, 2} }; // Start search at node 0 with filter 1.0
+    vector<float> query = {1.5, 1.5};   // Query point
+    int k = 2; // Top 2 nodes
+    int L = 3; // Max list size
+
+    auto result = FilteredGreedySearch(medoids, query, k, L, data, G, 1.0);
+    vector<int> result_list = result.first;
+
+    // Expected closest nodes: [0, 1]
+    TEST_ASSERT(result_list.size() == 2);
+    TEST_ASSERT(result_list[0] == 0 || result_list[1] == 0);
+    TEST_ASSERT(result_list[0] == 1 || result_list[1] == 1);
+
+    cout << "FilteredGreedySearch_Test_1 passed!" << endl;
+}
+
+
 // ------------ STITCHED VAMANA ALGORITHM ------------
 void StitchedVamana_1(){
 
@@ -613,6 +654,9 @@ TEST_LIST = {
     {"Filtered Robust Prune (test 2)", FilteredRobustPrune_Test_2},
     {"Filtered Robust Prune (test 3)", FilteredRobustPrune_Test_3},
     {"Filtered Robust Prune (test 4)", FilteredRobustPrune_Test_4},
+
+    //Filtered Greedy Search Tests
+    {"Filtered Greedy Search (test 1)",FilteredGreedySearch_Test_1},
 
     //Stitched Vamana Tests
     {"Stitched Vamana Algorithm", StitchedVamana_1},
