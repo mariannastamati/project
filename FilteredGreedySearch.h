@@ -18,6 +18,6 @@ pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
     int L, 
     const vector<vector<float>>& vectors,
     const vector<graph>& graph,
-    const float filter) ;
+    const float filter);
 
 #endif // FILTERED_GREEDY_SEARCH_H
