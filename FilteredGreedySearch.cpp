@@ -1,130 +1,137 @@
-// #include "FilteredGreedySearch.h"
+#include "FilteredGreedySearch.h"
 
-// #include <cmath>
-// #include <algorithm>
-// #include <set>
-// #include <vector>
+using namespace std;
 
-// #include "graph.h"
 
-// using namespace std;
+// Function to remove common elements
+inline vector<int> removeCommonElements(const vector<int>& visited, const vector<int>& neighbors_list){
+    vector<int> result; //  Variable to save result
 
-// double EuclideanDistance(const vector<float>& node1, const vector<float>& node2){
+    for (int num : neighbors_list){
 
-//     if (node1.size() != node2.size()) {
-//         throw invalid_argument("Vectors have different size.");
-//     }
+        if (find(visited.begin(), visited.end(), num) == visited.end()) {
+            // If num does not belong to visited, add to result
+            result.push_back(num);
+        }
+    }
+    return result;
+}
 
-//     double sum = 0.0;
-//     int size = node1.size();
-//     for (int i = 0; i < size; ++i){
 
-//         double diff = (node1[i] - node2[i])*(node1[i] - node2[i]);
-//         sum = sum + diff;
-//     }
-   
-//     double Euclidean = sqrt(sum);
-//     return Euclidean;
-// } 
+//Filtered Greedy Search
+pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
+    const vector<float>& query, 
+    int k, 
+    int L, 
+    const vector<vector<float>>& vectors,
+    const vector<graph>& graph,
+    const float filter){ 
 
-// // Function to remove common elements
-// vector<int> removeCommonElements(const vector<int>& visited, const vector<int>& neighbors_list){
-//     vector<int> result; //  Variable to save result
 
-//     for (int num : neighbors_list){
-
-//         if (find(visited.begin(), visited.end(), num) == visited.end()) {
-//             // If num does not belong to visited, add to result
-//             result.push_back(num);
-//         }
-//     }
-//     return result;
-// }
- 
-
-// //Filtered Greedy Search
-
-// pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
-//    const vector<float>& query, 
-//     int k, 
-//     int L, 
-//     const vector<vector<float>>& vectors,
-//     const vector<vector<int>>& graph,
-//     const vector<fnode>& filters) { 
-
-//         vector<int> visited;              // Set for the nodes we have visited (empty)
-//         vector<int> List ;      // Search list which we initialize with the start node 
+    vector<int> visited;        // Set for the nodes we have visited (empty)
+    vector<int> List;           // Search list which we initialize with the start node 
     
+    // If filter > -1 then we have filtered query
+    if(filter > -1){
 
-//     // Iterate over medoids and filters, and add the node_id to List if it satisfies the filter
-//        for (const auto& medoid : medoids) {
-//         for (const auto& filter : filters) {
-//             // if (medoid.satisfiesFilter(filter.filter)) {
-//             //     List.push_back(medoid.node_id);
-//             //     break;
-//             // }
-//         }
-//     }
+        // Iterate over medoids and filters, and add the node_id to List if it satisfies the filter
+        for (const auto& medoid : medoids){
+            
+            if(medoid.filter==filter){ 
+                List.push_back(medoid.start_node);
+            }       
+        }
 
-//     vector<int> L_without_V = removeCommonElements(visited, List);
-//     // While L\V != empty
-//     while(!L_without_V.empty()){
+    // Else we have unfiltered query (search in every node with every filter)
+    }else{
 
-//         // For every p in L_without_V keep the min euclidean from p and query point
-//         double mindist = INFINITY;
-//         int pstar = -1;
+        // Iterate over medoids and filters, and add all the start nodes in search list L
+        for (const auto& medoid : medoids){
+            
+            List.push_back(medoid.start_node);    
+        }
+    }
 
-//         int size = L_without_V.size();
-//         for(int p = 0; p < size; p++){
+    vector<int> L_without_V = removeCommonElements(visited, List);
 
-//             // Calculate Euclidean distance between p and query point
-//             double dist = EuclideanDistance(vectors[L_without_V[p]], query);
+    // While L\V != empty
+    while(!L_without_V.empty()){
 
-//             // Keep min distance and p*
-//             if(dist < mindist){
-//                 mindist = dist;
-//                 pstar = L_without_V[p];
-//             }
-//         }
+        // For every p in L_without_V keep the min euclidean from p and query point
+        double mindist = INFINITY;
+        int pstar = -1;
 
-//         // Update list <- list + (neighbors of p* (pstar))
-//          for (const auto& e : graph[pstar]) {
-//            if (find(List.begin(), List.end(), e) == List.end()){
-//                // Check if the node passes the filter of any medoid
-//                 for (const auto& medoid : medoids) {
-//                     if (medoid.filter==(vectors[e][0])) {
-//                         List.push_back(e);
-//                         break;
-//                     }
-//                 }
-//             }
-//         }
+        int size = L_without_V.size();
+        for(int p = 0; p < size; p++){
 
-//         // Update visited <- visited + p* (pstar)
-//         visited.push_back(pstar);
+            // Calculate Euclidean distance between p and query point
+            double dist = EuclideanDistance(vectors[L_without_V[p]], query);
 
-//         // Checking if List_size is greater than L
-//         int Lsize = List.size();
-//         if(Lsize > L){
+            // Keep min distance and p*
+            if(dist < mindist){
+                mindist = dist;
+                pstar = L_without_V[p];
+            }
+        }
 
-//             // Keep only the top L elements in List 
-//             sort(List.begin(), List.end(), [&query, &vectors](int a, int b){
-//                 return EuclideanDistance(vectors[a], query) < EuclideanDistance(vectors[b], query);
-//             });
-//             List.resize(L); // Keep only the top L closest points
-//         }
+        // Update visited <- visited + p* (pstar)
+        if(find(visited.begin(), visited.end(), pstar) == visited.end()){
+            visited.push_back(pstar);
+        }
 
-//         // Calculate L\V with the updated data
-//         L_without_V = removeCommonElements(visited,List);
-//     }
+        // Update list <- list + (neighbors of p* (pstar))
+        for (const auto& e : graph[pstar].neighbors){
 
+            // Get the node_id from the edge pair
+            int neighbor_id = e.first;     
 
-//     sort(List.begin(), List.end(), [&query, &vectors](int a, int b){
-//         return EuclideanDistance(vectors[a], query) < EuclideanDistance(vectors[b], query);
-//     });
-//     List.resize(k); // We return only the k closest points
+            // If query is filtered, check filters
+            if(filter > -1){
 
+                // Check if the node has the same filter as query and has not been visited
+                if ((graph[neighbor_id].filter == filter) && (find(visited.begin(), visited.end(), neighbor_id) == visited.end())
+                && (find(List.begin(), List.end(), neighbor_id) == List.end())){
+                    
+                    List.push_back(neighbor_id); // Add the node to List
+                }
 
-//    return make_pair(List, visited);
+            // If query is unfiltered don't check in filters
+            }else{
 
-//     }
+                if((find(visited.begin(), visited.end(), neighbor_id) == visited.end())
+                && (find(List.begin(), List.end(), neighbor_id) == List.end())){
+                    List.push_back(neighbor_id); // Add the node to List
+                }
+            }
+        }
+
+        // Checking if List_size is greater than L
+        int Lsize = List.size();
+        if(Lsize > L){
+
+            // Keep only the top L elements in List 
+            sort(List.begin(), List.end(), [&query, &vectors](int a, int b){
+                return EuclideanDistance(vectors[a], query) < EuclideanDistance(vectors[b], query);
+            });
+            List.resize(L); // Keep only the top L closest points
+        }
+
+        // Calculate L\V with the updated data
+        L_without_V = removeCommonElements(visited,List);
+    }
+
+    // Sort closest points in L and keep only k closest
+    sort(List.begin(), List.end(), [&query, &vectors](int a, int b){
+        return EuclideanDistance(vectors[a], query) < EuclideanDistance(vectors[b], query);
+    });
+
+    // If List size is greater than k return only k, else return the whole list
+    int Lsize = List.size();
+    if(Lsize > k){
+
+        List.resize(k); // We return only the k closest points
+    }
+
+    // Return result
+    return make_pair(List, visited);
+}
