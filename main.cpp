@@ -15,7 +15,7 @@
 int main(int argc, char **argv){
 
     // Check if given arguments are acceptable
-    if (argc != 11) {
+    if (argc != 12) {
         cout << "Usage: <source_path> <query_path> <a> <t> <L> <R> <k> <L_smal> <R_small> <R_stitched>" << endl;
         return 1; // Exit with error
     }
@@ -32,6 +32,7 @@ int main(int argc, char **argv){
     int L_small = atoi(argv[8]);        // Search list size L for Stitched Vamana
     int R_small = atoi(argv[9]);        // Number of max out-degree for every node in Stitched Vamana
     int R_stitched = atoi(argv[10]);    // Number to reduce max out-degree for every node in Stitched Vamana
+    string groundtruth = argv[11];      // Groundtruth file
     
     // Print arguments
     cout << "Prune threshold a: " << a << endl;
@@ -69,6 +70,7 @@ int main(int argc, char **argv){
 
     // Generate groundtruth file for queries (for 100 nearest neighbors)
     //generateGroundTruth(queries,nodes,100);
+    vector<vector<int>> data = readGroundtruth(groundtruth);        // Read Groundtruth
 
     // Vector to keep the start node for every filter
     vector<Map> STf;

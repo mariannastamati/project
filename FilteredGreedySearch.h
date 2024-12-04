@@ -3,6 +3,12 @@
 
 #include <vector> 
 #include <set>
+#include <fstream>
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+
+#include "graph.h"
 #include "medoid.h"
 
 
@@ -12,8 +18,7 @@ inline vector<int> removeCommonElements(const vector<int>& visited, const vector
 
 
 //  Filtered Greedy Search Algorithm 
-pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
-   const vector<float>& query, 
+pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids, const vector<float>& query, 
     int k, 
     int L, 
     const vector<vector<float>>& vectors,

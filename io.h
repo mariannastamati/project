@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <stdint.h>
+#include <sstream>
 
 #include "assert.h"
 
@@ -38,4 +39,40 @@ void ReadBin(const string &file_path, const int num_dimensions, vector<vector<fl
 
   ifs.close();
   cout << "Finish Reading" << endl;
+}
+
+
+// Read Groundtruth
+vector<vector<int>> readGroundtruth(const string& filename){
+
+    ifstream file(filename);
+    vector<std::vector<int>> result;
+    string line;
+
+    if (!file.is_open()) {
+        cerr << "Unable to open file: " << filename << endl;
+        return result;
+    }
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        vector<int> row;
+        int number;
+        bool hasNumbers = false;
+
+        while (ss >> number) {
+            row.push_back(number);
+            hasNumbers = true;
+        }
+
+        // If the line is empty then write -1 in vector
+        if (!hasNumbers) {
+            row.push_back(-1);
+        }
+
+        result.push_back(row);
+    }
+
+    file.close();
+    return result;
 }
