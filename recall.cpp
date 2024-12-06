@@ -53,9 +53,7 @@ float Greedy_and_recall(vector<vector<float>> nodes, vector<vector<float>> queri
         
         sum = sum + recall;
 
-        // Print query Recall but keep only 2 decimal
-        cout << fixed << setprecision(2);
-        cout << "Recall: " << recall << "%" << endl;
+        cout << "Recall: " << static_cast<int>(recall * 100) << "%" << endl;
     }
 
     return sum;
