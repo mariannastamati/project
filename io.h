@@ -74,5 +74,7 @@ vector<vector<int>> readGroundtruth(const string& filename){
     }
 
     file.close();
+
+    cout << "Finish Reading" << endl;
     return result;
 }

@@ -29,7 +29,9 @@ pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
 
 
     vector<int> visited;        // Set for the nodes we have visited (empty)
-    vector<int> List;           // Search list which we initialize with the start node 
+    vector<int> List;           // Search list which we initialize with the start node
+
+    bool flag = 0;              // Flag for filtered queries (if filter of query exists in dataset)
     
     // If filter > -1 then we have filtered query
     if(filter > -1){
@@ -38,12 +40,16 @@ pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
         for (const auto& medoid : medoids){
             
             if(medoid.filter==filter){ 
+
                 List.push_back(medoid.start_node);
+                flag = 1;       // Medoid found, filter exists in dataset
             }       
         }
 
     // Else we have unfiltered query (search in every node with every filter)
     }else{
+
+        flag = 1;       // Filter exists (unfiltered query satisfies every filter)
 
         // Iterate over medoids and filters, and add all the start nodes in search list L
         for (const auto& medoid : medoids){
@@ -51,6 +57,15 @@ pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids,
             List.push_back(medoid.start_node);    
         }
     }
+
+
+    // If filter of query doesn't exist in dataset then return (we can't find neighbors)
+    if(flag == 0){
+
+        cout << "Query with filter: " << static_cast<int>(filter) << ". This filter does not exist in graph." << endl;
+        return make_pair(List, visited);
+    }
+
 
     vector<int> L_without_V = removeCommonElements(visited, List);
 
