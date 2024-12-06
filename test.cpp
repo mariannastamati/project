@@ -734,6 +734,55 @@ void FilteredGreedySearch_Test_4() {
 }
 
 
+// ------------ FILTERED VAMANA ALGORITHM ------------
+void FilteredVamana_1(){
+
+    // Setup dataset with 2 different filters
+    vector<vector<float>> data = {
+        {1.0, 1.0, 1.0}, // 0 
+        {1.0, 2.0, 2.0}, // 1
+        {1.0, 3.0, 2.0}, // 2
+        {1.0, 6.0, 2.0}, // 3
+        {1.0, 8.0, 2.0}, // 4
+        {1.0, 5.0, 9.3}, // 5
+        {2.0, 3.0, 3.0}, // 6
+        {2.0, 5.0, 5.0}, // 7
+        {2.0, 3.8, 2.1}, // 8
+        {2.0, 3.9, 3.0}, // 9
+        {2.0, 5.0, 5.2}, // 10
+        {2.0, 7.0, 2.1}  // 11
+    };
+
+    float a = 1.2;
+    int L = 10;
+    int R = 5;
+    int t = 3;
+
+    vector<Map> STf = {
+        {1.0, 2},
+        {2.0, 9}
+    };
+
+   vector <graph> G_Filtered = FilteredVamana(data,a,L,R,t,STf);
+
+    cout << endl << " Max out-neighbors for every node must be <= 5" << endl;
+    PrintGraph(G_Filtered);
+
+    // Check the size of neighbors in every node
+    bool flag = 0;
+    for(size_t i = 0; i < G_Filtered.size(); i++){
+
+        int ns = G_Filtered[i].neighbors.size();
+        if(ns > R){
+            flag = 1;
+        }
+    }
+
+    // Max out-neighbors for every node must be <= R_stitched
+    TEST_ASSERT(flag == 0); 
+}
+
+
 // ------------ STITCHED VAMANA ALGORITHM ------------
 void StitchedVamana_1(){
 
@@ -836,6 +885,9 @@ TEST_LIST = {
     {"Filtered Greedy Search (test 2)", FilteredGreedySearch_Test_2},
     {"Filtered Greedy Search (test 3)", FilteredGreedySearch_Test_3},
     {"Filtered Greedy Search (test 4)", FilteredGreedySearch_Test_4},
+
+    //Filtered Vamana Tests
+    {"Filtered Vamana Algorithm", FilteredVamana_1},
 
     //Stitched Vamana Tests
     {"Stitched Vamana Algorithm", StitchedVamana_1},
