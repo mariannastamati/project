@@ -13,7 +13,7 @@
 #include "StitchedVamana.h"
 #include "recall.h"
 
-using namespace std::chrono;
+using namespace chrono;
 
 
 int main(int argc, char **argv){
