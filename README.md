@@ -34,12 +34,14 @@ To clean Test Main all: ```make test=yes clean```
 Κατασκευή ευρετηρίου γράφου με δύο τρόπους Filtered Vamana και Stitched Vamana, υλοποίηση αλγορίθμων FilteredGreedySearch και FilteredRobustPrune, 
 εύρεση start node (medoid για κάθε φίλτρο) με την χρήση του αλγορίθμου FindMedoid.  
 Χρησιμοποιούνται datasets που έχουν μόνο ένα φίλτρο σε κάθε στοιχείο-κόμβο
-(τα datasets, πριν χρησιμοποιηθούν, "καθαρίζονται" και αφαιρούνται τα timestamps και τα queries που περιέχουν ερωτήματα που αφορούν timestamps).
+(τα datasets, πριν χρησιμοποιηθούν, "καθαρίζονται" και αφαιρούνται τα timestamps και τα queries που περιέχουν ερωτήματα που αφορούν timestamps).  
+
+Έχει υλοποιηθεί επίσης, ένα αρχείο ```groundtruth.h``` που περιέχει την συνάρτηση για την παραγωγή αρχείου groundtruth.txt με χρήση brute force, το οποίο περιέχει τους 100 κοντινότερους πραγματικούς γείτονες για κάθε query point.
+
+Ακόμα, υπάρχει χρονόμετρο για την μέτρηση του ολικού χρόνου εκτέλεσης του προγράμματος, καθώς και για την χρονομέτρηση της παραγωγής των γράφων απο τις συναρτήσεις Filtered Vamana και Stitched Vamana ξεχωριστά.
 
 
-
-**AUTHORS**  
+**CONTRIBUTORS**  
 [Χριστίνα Διαμαντή](https://github.com/ChristinaDiam) - 1115201800046  
 [Μαριάννα Σταμάτη](https://github.com/mariannastamati) - 1115202000183  
 [Αντρέας Γιέβτοβιτς](https://github.com/zodicx) - 1115202000033
-
