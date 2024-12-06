@@ -14,6 +14,8 @@
 
 using namespace std; 
 
+inline vector<int> removeCommonElements(const vector<int>& visited, const vector<int>& neighbors_list);
+
 
 //  Filtered Greedy Search Algorithm 
 pair<vector<int>, vector<int>> FilteredGreedySearch( const vector<Map>& medoids, const vector<float>& query, 
