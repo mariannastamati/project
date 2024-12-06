@@ -10,6 +10,7 @@
 #include "groundtruth.h"
 #include "FilteredVamana.h"
 #include "StitchedVamana.h"
+#include "recall.h"
 
 
 int main(int argc, char **argv){
@@ -70,13 +71,14 @@ int main(int argc, char **argv){
 
     // Generate groundtruth file for queries (for 100 nearest neighbors)
     //generateGroundTruth(queries,nodes,100);
-    vector<vector<int>> data = readGroundtruth(groundtruth);        // Read Groundtruth
+    cout << "Reading groundtruth..."<< endl;
+    vector<vector<int>> gt = readGroundtruth(groundtruth);        // Read Groundtruth
 
     // Vector to keep the start node for every filter
     vector<Map> STf;
 
     // Call Filtered Vamana algorithm to create a graph
-    cout << "Running Filtered Vamana..." << endl;
+    cout << endl << "Running Filtered Vamana..." << endl;
     vector <graph> G_Filtered = FilteredVamana(nodes,a,L,R,t,STf);
     cout << "Complete. Filtered Vamana Graph created" << endl << endl;
 
@@ -84,6 +86,25 @@ int main(int argc, char **argv){
     cout << "Running Stitched Vamana..." << endl;
     vector <graph> G_Stitched = StitchedVamana(nodes,a,L_small,R_small,R_stitched,STf);
     cout << "Complete. Stitched Vamana Graph created" << endl << endl;
+
+
+    // Filtered Greedy Search and recall for every query point in "Query Dataset"
+    cout << "Find k nearest neighbors for queries (using Filtered Vamana Graph)..." << endl << endl;;
+    float sum1 = Greedy_and_recall(nodes,queries,gt,G_Filtered,STf,k,L);
+    
+    // Print Overall Recall
+    int queries_size = queries.size();
+    OverallRecall(sum1, queries_size);
+    cout << endl;
+
+    // Filtered Greedy Search and recall for every query point in "Query Dataset"
+    cout << "Find k nearest neighbors for queries (using Stitched Vamana Graph)..." << endl;
+    float sum2 = Greedy_and_recall(nodes,queries,gt,G_Stitched,STf,k,L);
+    
+    // Print Overall Recall
+    OverallRecall(sum2, queries_size);
+
+    cout << "-----------------------" << endl; 
     
     return 0;
 }
