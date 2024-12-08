@@ -20,7 +20,7 @@ int main(int argc, char **argv){
 
     // Check if given arguments are acceptable
     if (argc != 12) {
-        cout << "Usage: <source_path> <query_path> <a> <t> <L> <R> <k> <L_smal> <R_small> <R_stitched> <groundtruth.txt>" << endl;
+        cout << "Usage: <source_path> <query_path> <a> <t> <L> <R> <k> <L_smal> <R_small> <R_stitched>" << endl;
         return 1; // Exit with error
     }
 
