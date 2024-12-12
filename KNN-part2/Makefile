@@ -2,7 +2,7 @@
 CXX = g++
 CXXFLAGS = -g3 -O3 -Wall -std=c++17
 
-# Conditional compilation to run either the program or unit testing
+# Conditional compilation to run either the program or unit  testing
 ifeq ($(test),yes)
 	SRCS = $(subst main.cpp,,$(wildcard *.cpp))
 else
