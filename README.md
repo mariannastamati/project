@@ -40,6 +40,8 @@ To clean Test Main all: ```make test=yes clean```
 
 Ακόμα, υπάρχει χρονόμετρο για την μέτρηση του ολικού χρόνου εκτέλεσης του προγράμματος, καθώς και για την χρονομέτρηση της παραγωγής των γράφων απο τις συναρτήσεις Filtered Vamana και Stitched Vamana ξεχωριστά.
 
+### Part 3 - Βελτιστοποιήσεις
+
 
 **CONTRIBUTORS**  
 [Χριστίνα Διαμαντή](https://github.com/ChristinaDiam) - 1115201800046  
