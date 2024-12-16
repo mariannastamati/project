@@ -35,6 +35,12 @@ void GenerateGroundtruthPhase(const string& source_path, const string& query_pat
 // Filtered Vamana Phase
 void FilteredVamanaPhase(const string& source_path, float a, int t, int L, int R, uint32_t num_data_dimensions){
 
+    // Print arguments
+    cout << "Prune threshold a: " << a << endl;
+    cout << "Medoid threshold t: " << t << endl;
+    cout << "Search list size L: " << L << endl;
+    cout << "Max out-degree R: " << R << endl << endl;
+
     vector<vector<float>> nodes;
 
     cout << "Reading data points..." << endl;
@@ -60,6 +66,12 @@ void FilteredVamanaPhase(const string& source_path, float a, int t, int L, int R
 void StitchedVamanaPhase(const string& source_path, float a, int L_small, int R_small, int R_stitched, 
     uint32_t num_data_dimensions){
 
+    // Print arguments
+    cout << "Prune threshold a: " << a << endl;
+    cout << "Search list size L_small: " << L_small << endl;
+    cout << "Max out-degree R_small: " << R_small << endl;
+    cout << "Max reduced out-degree R_stitched: " << R_stitched << endl << endl;
+
     vector<vector<float>> nodes;
 
     cout << "Reading data points..." << endl;
@@ -71,6 +83,8 @@ void StitchedVamanaPhase(const string& source_path, float a, int L_small, int R_
 
     // Medoid map
     vector<Map> STf;
+    // Find start node (medoid of cluster) for every filter f
+    //STf = FindMedoid(nodes,threshold);
 
     cout << "Running Stitched Vamana..." << endl;
     auto start = high_resolution_clock::now();
@@ -82,8 +96,12 @@ void StitchedVamanaPhase(const string& source_path, float a, int L_small, int R_
 
 
 // Greedy Search and Recall Phase
-void GreedySearchPhase(const string& source_path, const string& query_path, const string& groundtruth_path, float a, 
+void GreedySearchPhase(const string& source_path, const string& query_path, const string& groundtruth_path, 
     int L, int k, uint32_t num_data_dimensions, uint32_t num_query_dimensions){
+
+    // Print arguments
+    cout << "Search list size L: " << L << endl;
+    cout << "Number of nearest neighbors k: " << k << endl << endl;
 
     vector<vector<float>> nodes;
     vector<vector<float>> queries;
@@ -110,6 +128,8 @@ void GreedySearchPhase(const string& source_path, const string& query_path, cons
 
     // Medoid map
     vector<Map> STf;
+    // Find start node (medoid of cluster) for every filter f
+    //STf = FindMedoid(nodes,threshold);
 
     cout << "Find k nearest neighbors for queries (using Greedy Search)..." << endl;
     float sum = Greedy_and_recall(nodes, queries, gt, {}, STf, k, L);

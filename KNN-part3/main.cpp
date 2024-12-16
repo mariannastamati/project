@@ -9,7 +9,8 @@ int main(int argc, char **argv){
         cout << "       groundtruth <data_path> <query_path> <groundtruth_path>" << endl;
         cout << "       filtered <data_path> <a> <t> <L> <R>" << endl;
         cout << "       stitched <data_path> <a> <L_small> <R_small> <R_stitched>" << endl;
-        cout << "       greedy <data_path> <query_path> <groundtruth_path> <a> <L> <k>" << endl;
+        cout << "       greedy <data_path> <query_path> <groundtruth_path> <L> <k>" << endl;
+        
         return 1;
     }
 
@@ -42,11 +43,11 @@ int main(int argc, char **argv){
         StitchedVamanaPhase(argv[2], atof(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), num_data_dimensions);
 
     }else if (phase == "greedy"){
-        if (argc != 8) {
-            cout << "Usage: greedy <data_path> <query_path> <groundtruth_path> <a> <L> <k>" << endl;
+        if (argc != 7) {
+            cout << "Usage: greedy <data_path> <query_path> <groundtruth_path> <L> <k>" << endl;
             return 1;
         }
-        GreedySearchPhase(argv[2], argv[3], argv[4], atof(argv[5]), atoi(argv[6]), atoi(argv[7]), num_data_dimensions, num_query_dimensions);
+        GreedySearchPhase(argv[2], argv[3], argv[4], atoi(argv[5]), atoi(argv[6]), num_data_dimensions, num_query_dimensions);
 
     }else{
         cout << "Unknown input: " << phase << endl << endl;
@@ -55,7 +56,7 @@ int main(int argc, char **argv){
         cout << "       groundtruth <data_path> <query_path> <groundtruth_path>" << endl;
         cout << "       filtered <data_path> <a> <t> <L> <R>" << endl;
         cout << "       stitched <data_path> <a> <L_small> <R_small> <R_stitched>" << endl;
-        cout << "       greedy <data_path> <query_path> <groundtruth_path> <a> <L> <k>" << endl;
+        cout << "       greedy <data_path> <query_path> <groundtruth_path> <L> <k>" << endl;
 
         return 1;
     }
