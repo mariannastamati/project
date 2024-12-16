@@ -15,11 +15,24 @@ OBJS = $(SRCS:.cpp=.o)
 # Executable name
 TARGET = executable
 
+# Default values for variables (command-line arguments)
+dataset ?= ../datasets2/dummy-data.bin
+queries ?= ../datasets2/dummy-queries.bin
+a ?= 1.2
+t ?= 30
+L ?= 100
+R ?= 10
+k ?= 50
+L_small ?= 80
+R_small ?= 13
+R_stitched ?= 10
+groundtruth ?= groundtruth.txt
+
 # Command line arguments for the executable program
 ifeq ($(test),yes)
 	ARGS =
 else
-	ARGS = ../datasets2/dummy-data.bin ../datasets2/dummy-queries.bin 1.2 10 100 10 50 80 13 10 groundtruth.txt
+	ARGS = $(dataset) $(queries) $(a) $(t) $(L) $(R) $(k) $(L_small) $(R_small) $(R_stitched) $(groundtruth)
 endif
 
 # Command line arguments for Valgrind
