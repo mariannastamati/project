@@ -15,7 +15,7 @@ using namespace std;
 // @brief Reading binary data vectors. Raw data store as a (N x dim)
 // @param file_path file path of binary data
 // @param data returned 2D data vectors
-void ReadBin(const string &file_path, const int num_dimensions, vector<vector<float>> &data){
+inline void ReadBin(const string &file_path, const int num_dimensions, vector<vector<float>> &data){
 
   ifstream ifs;
   ifs.open(file_path, std::ios::binary);
@@ -43,7 +43,7 @@ void ReadBin(const string &file_path, const int num_dimensions, vector<vector<fl
 
 
 // Read Groundtruth
-vector<vector<int>> readGroundtruth(const string& filename){
+inline vector<vector<int>> readGroundtruth(const string& filename){
 
     ifstream file(filename);
     vector<std::vector<int>> result;

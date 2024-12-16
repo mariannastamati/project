@@ -1,6 +1,7 @@
 ## K23α - Ανάπτυξη Λογισμικού Για Πληροφοριακά Συστήματα
 
-### Part 1 - Αναζήτηση εγγύτερου γείτονα (Nearest Neighbor Search)
+### Part 1 - Nearest Neighbour Search
+
 To compile: ```make```  
 To run: ```make run```   
 To run using valgrind: ```make val```  
@@ -11,9 +12,9 @@ To run with Test Main: ```make test=yes run```
 To run Test Main using valgrind: ```make test=yes val```   
 To clean Test Main all: ```make test=yes clean```   
    
-Κατασκευή ευρετηρίου-γράφου Vamana, υλοποίηση αλγορίθμων GreedySearch και RobustPrune, εύρεση του medoid με αλγόριθμο brute force.
+Construction of Vamana graph index, implementation of GreedySearch and RobustPrune algorithms, finding the medoid of graph using brute force algorithm.
 
-### Part 2 - Προσεγγιστική Αναζήτηση Εγγύτερων Γειτόνων με Φίλτρα - Filtered ANNS
+### Part 2 - Approximate Nearest Neighbours Search (with Filters) - Filtered ANNS
 
 To compile: ```make```  
 
@@ -31,16 +32,46 @@ To run Test Main using valgrind: ```make test=yes val```
 To clean Test Main all: ```make test=yes clean```     
 
 
-Κατασκευή ευρετηρίου γράφου με δύο τρόπους Filtered Vamana και Stitched Vamana, υλοποίηση αλγορίθμων FilteredGreedySearch και FilteredRobustPrune, 
-εύρεση start node (medoid για κάθε φίλτρο) με την χρήση του αλγορίθμου FindMedoid.  
-Χρησιμοποιούνται datasets που έχουν μόνο ένα φίλτρο σε κάθε στοιχείο-κόμβο
-(τα datasets, πριν χρησιμοποιηθούν, "καθαρίζονται" και αφαιρούνται τα timestamps και τα queries που περιέχουν ερωτήματα που αφορούν timestamps).  
+Construction of a graph index with two modes Filtered Vamana and Stitched Vamana, implementation of FilteredGreedySearch and FilteredRobustPrune algorithms, 
+finding start node (medoid for each filter) using FindMedoid algorithm.  
+Datasets have only one filter on each element/node (Datasets, before being used, are "cleaned" from timestamps. Also queries involving timestamps are removed). 
 
-Έχει υλοποιηθεί επίσης, ένα αρχείο ```groundtruth.h``` που περιέχει την συνάρτηση για την παραγωγή αρχείου groundtruth.txt με χρήση brute force, το οποίο περιέχει τους 100 κοντινότερους πραγματικούς γείτονες για κάθε query point.
+A ```groundtruth.h``` file has also been implemented that contains the function for generating a groundtruth.txt file (using  brute force) containing the 100 real nearest neighbors for each query point. (groundtruth.txt file is used to check and find the recall)
 
-Ακόμα, υπάρχει χρονόμετρο για την μέτρηση του ολικού χρόνου εκτέλεσης του προγράμματος, καθώς και για την χρονομέτρηση της παραγωγής των γράφων απο τις συναρτήσεις Filtered Vamana και Stitched Vamana ξεχωριστά.
+Also, there is a timer to count the total execution time of the program and two separate timers to count for the creation of Filtered Vamana graph and Stitched Vamana graph as well.
 
-### Part 3 - Βελτιστοποιήσεις
+### Part 3 - Optimizations
+
+A program that runs in separate phases.
+
+#### Main Program
+
+To compile: ```make```  
+
+To run Groundtruth phase using default arguments: ```make run-groundtruth```  
+To run Filtered Vamana phase using default arguments: ```make run-filtered```   
+To run Stitched Vamana phase using default arguments: ```make run-stitched```   
+To run Greedy for queries phase using default arguments: ```make run-greedy```  
+To run all phases using default arguments: ```make run-all```   
+
+To run Greedy for queries phase and save recall: ```make save-greedy```   
+
+To run Groundtruth phase under Valgrind: ```make val-groundtruth```  
+To run Filtered Vamana phase under Valgrind: ```make val-filtered```   
+To run Stitched Vamana phase under Valgrind: ```make val-stitched```   
+To run Greedy for queries phase under Valgrind: ```make val-greedy```  
+To run all phases under Valgrind: ```make val-all```   
+
+#### Test Main Program
+
+To run with Test Main: ```make run-test```  
+To run with Test Main under Valgrind:  ```make val-test``` 
+
+To clean all: ```make clean``` (cleans all - including main.o and test.o)
+
+* For **custom arguments** use the same commands as above, just add the new value to the argument you want to change.    
+e.g. ```make run-filtered t=20 a=1.1```   
+This command runs Filtered Vamana phase and changes only the value of **a** and **t** with the custom values. (the order of custom arguments does not matter)
 
 
 **CONTRIBUTORS**  
