@@ -10,7 +10,7 @@
 
 
 // Function to generate Groundtruth file for queries (contains the real K nearest neighbors of every query)
-void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &data, int k){
+inline void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &data, int k){
 
     ofstream file("groundtruth.txt");
     if (!file.is_open()) {
@@ -152,8 +152,6 @@ void generateGroundTruth(vector<vector<float>> &queries, vector<vector<float>> &
     }
 
     file.close();
-    cout << "Groundtruth file generated." << endl;
 }
-
 
 #endif

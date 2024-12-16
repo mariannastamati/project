@@ -2,18 +2,18 @@
 CXX = g++
 CXXFLAGS = -g3 -O3 -Wall -std=c++17
 
-# Conditional compilation to run either the program or unit  testing
-ifeq ($(test),yes)
-	SRCS = $(subst main.cpp,,$(wildcard *.cpp))
-else
-	SRCS = $(subst test.cpp,,$(wildcard *.cpp))
-endif
+# Source files
+SRCS = $(wildcard *.cpp)
+MAIN_SRCS = $(filter-out test.cpp,$(SRCS))
+TEST_SRCS = $(filter-out main.cpp,$(SRCS))
 
-# Object file
-OBJS = $(SRCS:.cpp=.o)
+# Object files
+MAIN_OBJS = $(MAIN_SRCS:.cpp=.o)
+TEST_OBJS = $(TEST_SRCS:.cpp=.o)
 
-# Executable name
-TARGET = executable
+# Executable names
+MAIN_EXECUTABLE = executable
+TEST_EXECUTABLE = test_executable
 
 # Default values for variables (command-line arguments)
 dataset ?= ../datasets2/dummy-data.bin
@@ -28,36 +28,65 @@ R_small ?= 13
 R_stitched ?= 10
 groundtruth ?= groundtruth.txt
 
-# Command line arguments for the executable program
-ifeq ($(test),yes)
-	ARGS =
-else
-	ARGS = $(dataset) $(queries) $(a) $(t) $(L) $(R) $(k) $(L_small) $(R_small) $(R_stitched) $(groundtruth)
-endif
-
 # Command line arguments for Valgrind
 VALGRIND_ARGS = --track-origins=yes --leak-check=full --trace-children=yes
 
-# Rule to build the executable
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+# Rule to build the main executable
+$(MAIN_EXECUTABLE): $(MAIN_OBJS)
+	$(CXX) $(CXXFLAGS) -o $(MAIN_EXECUTABLE) $(MAIN_OBJS)
+
+# Rule to build the test executable
+$(TEST_EXECUTABLE): $(TEST_OBJS)
+	$(CXX) $(CXXFLAGS) -o $(TEST_EXECUTABLE) $(TEST_OBJS)
 
 # Rule to build object files
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Run the executable program
-run: $(TARGET)
-	./$(TARGET) $(ARGS) 
+# Run the main executable for different phases
+run-groundtruth: $(MAIN_EXECUTABLE)
+	./$(MAIN_EXECUTABLE) groundtruth $(dataset) $(queries)
 
-# Run the executable program and save output
-save: $(TARGET)
-	./$(TARGET) $(ARGS) >> output.txt
+run-filtered: $(MAIN_EXECUTABLE)
+	./$(MAIN_EXECUTABLE) filtered $(dataset) $(a) $(t) $(L) $(R)
 
-# Run the executable program under Valgrind
-val: $(TARGET)
-	valgrind $(VALGRIND_ARGS) ./$(TARGET) $(ARGS)
+run-stitched: $(MAIN_EXECUTABLE)
+	./$(MAIN_EXECUTABLE) stitched $(dataset) $(a) $(L_small) $(R_small) $(R_stitched)
+
+run-greedy: $(MAIN_EXECUTABLE)
+	./$(MAIN_EXECUTABLE) greedy $(dataset) $(queries) $(groundtruth) $(L) $(k)
+
+# Run all phases
+run-all: run-groundtruth run-filtered run-stitched run-greedy
+
+# Run greedy phase and save output
+save-greedy: $(MAIN_EXECUTABLE)
+	./$(MAIN_EXECUTABLE) greedy $(dataset) $(queries) $(groundtruth) $(L) $(k) >> output.txt
+
+# Run each phase with Valgrind
+val-groundtruth: $(MAIN_EXECUTABLE)
+	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) groundtruth $(dataset) $(queries)
+
+val-filtered: $(MAIN_EXECUTABLE)
+	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) filtered $(dataset) $(a) $(t) $(L) $(R)
+
+val-stitched: $(MAIN_EXECUTABLE)
+	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) stitched $(dataset) $(a) $(L_small) $(R_small) $(R_stitched)
+
+val-greedy: $(MAIN_EXECUTABLE)
+	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) greedy $(dataset) $(queries) $(groundtruth) $(L) $(k)
+
+# Run all phases with Valgrind
+val-all: val-groundtruth val-filtered val-stitched val-greedy
+
+# Run the test executable
+run-test: $(TEST_EXECUTABLE)
+	./$(TEST_EXECUTABLE)
+
+# Run the test executable under Valgrind
+val-test: $(TEST_EXECUTABLE)
+	valgrind $(VALGRIND_ARGS) ./$(TEST_EXECUTABLE)
 
 # Clean the build files
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(MAIN_OBJS) $(TEST_OBJS) $(MAIN_EXECUTABLE) $(TEST_EXECUTABLE)
