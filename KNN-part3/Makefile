@@ -27,6 +27,7 @@ L_small ?= 80
 R_small ?= 13
 R_stitched ?= 10
 groundtruth ?= groundtruth.txt
+graph ?= G_stitched.bin
 
 # Command line arguments for Valgrind
 VALGRIND_ARGS = --track-origins=yes --leak-check=full --trace-children=yes
@@ -54,7 +55,7 @@ run-stitched: $(MAIN_EXECUTABLE) ## Run stitched vamana phase
 	./$(MAIN_EXECUTABLE) stitched $(dataset) $(a) $(L_small) $(R_small) $(R_stitched)
 
 run-greedy: $(MAIN_EXECUTABLE) ## Run greedy phase
-	./$(MAIN_EXECUTABLE) greedy $(dataset) $(queries) $(groundtruth) $(L) $(k)
+	./$(MAIN_EXECUTABLE) greedy $(dataset) $(queries) $(groundtruth) $(L) $(k) $(graph)
 
 # Run all phases
 run-all: run-groundtruth run-filtered run-stitched run-greedy ## Run all phases
@@ -74,7 +75,7 @@ val-stitched: $(MAIN_EXECUTABLE) ## Run stitched vamana phase under Valgrind
 	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) stitched $(dataset) $(a) $(L_small) $(R_small) $(R_stitched)
 
 val-greedy: $(MAIN_EXECUTABLE) ## Run greedy phase under Valgrind
-	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) greedy $(dataset) $(queries) $(groundtruth) $(L) $(k)
+	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) greedy $(dataset) $(queries) $(groundtruth) $(L) $(k) $(graph)
 
 # Run all phases with Valgrind
 val-all: val-groundtruth val-filtered val-stitched val-greedy ## Run all phases under Valgrind

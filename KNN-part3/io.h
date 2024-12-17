@@ -7,11 +7,12 @@
 #include <sstream>
 
 #include "assert.h"
+#include "graph.h"
 
 using namespace std;
 
-// Function to read binary files (based on io.h file of GitHub repository for Sigmod Contest 2024)
 
+// Function to read binary files (based on io.h file of GitHub repository for Sigmod Contest 2024)
 // @brief Reading binary data vectors. Raw data store as a (N x dim)
 // @param file_path file path of binary data
 // @param data returned 2D data vectors
@@ -77,4 +78,73 @@ inline vector<vector<int>> readGroundtruth(const string& filename){
 
     cout << "Finish Reading" << endl;
     return result;
+}
+
+
+// Save graph to file.bin
+inline void saveGraphToFile(const vector<graph>& G_Stitched, const string& filename){
+  
+    ofstream outfile(filename, ios::binary);
+    if (!outfile) {
+        cerr << "Error: Could not open file for writing." << endl;
+        return;
+    }
+
+    // Write the size of the graph vector
+    size_t graphSize = G_Stitched.size();
+    outfile.write(reinterpret_cast<const char*>(&graphSize), sizeof(graphSize));
+
+    for (const auto& node : G_Stitched) {
+        // Write the filter value
+        outfile.write(reinterpret_cast<const char*>(&node.filter), sizeof(node.filter));
+
+        // Write the size of the neighbors vector
+        size_t neighborSize = node.neighbors.size();
+        outfile.write(reinterpret_cast<const char*>(&neighborSize), sizeof(neighborSize));
+
+        // Write each neighbor (pair<int, float>)
+        for (const auto& [neighbor, distance] : node.neighbors) {
+            outfile.write(reinterpret_cast<const char*>(&neighbor), sizeof(neighbor));
+            outfile.write(reinterpret_cast<const char*>(&distance), sizeof(distance));
+        }
+    }
+
+    outfile.close();
+}
+
+
+// Read graph.bin and return graph
+inline vector<graph> ReadGraphFile(const string& filename){
+
+    ifstream infile(filename, ios::binary);
+    if (!infile) {
+        cerr << "Error: Could not open file for reading." << endl;
+        return {};
+    }
+
+    vector<graph> Graph;
+
+    // Read the size of the graph vector
+    size_t graphSize;
+    infile.read(reinterpret_cast<char*>(&graphSize), sizeof(graphSize));
+    Graph.resize(graphSize);
+
+    for (auto& node : Graph) {
+        // Read the filter value
+        infile.read(reinterpret_cast<char*>(&node.filter), sizeof(node.filter));
+
+        // Read the size of the neighbors vector
+        size_t neighborSize;
+        infile.read(reinterpret_cast<char*>(&neighborSize), sizeof(neighborSize));
+        node.neighbors.resize(neighborSize);
+
+        // Read each neighbor (pair<int, float>)
+        for (auto& [neighbor, distance] : node.neighbors) {
+            infile.read(reinterpret_cast<char*>(&neighbor), sizeof(neighbor));
+            infile.read(reinterpret_cast<char*>(&distance), sizeof(distance));
+        }
+    }
+
+    infile.close();
+    return Graph;
 }
