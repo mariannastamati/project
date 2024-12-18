@@ -5,26 +5,52 @@
 float Greedy_and_recall(vector<vector<float>> nodes, vector<vector<float>> queries, vector<vector<int>> gt,
     vector<graph> G, vector<Map> STf, int k, int L){
 
+    vector<vector<float>> q_filtered;       // To keep filtered queries
+    vector<vector<float>> q_unfiltered;     // To keep unfiltered queries
+    vector<int> gtf;                        // To keep groundtruth num for filtered
+    vector<int> gtu;                        // To keep groundtruth num for unfiltered
+
+    // For every query point in "Queries dataset" separate filtered queries from unfiltered queries  
+    int queries_size = queries.size();
+    for(int i = 0; i < queries_size; i++){
+
+        // If query_type=0 we have unfiltered query, else filtered
+        if(queries[i][0] == 0){
+            q_unfiltered.push_back(queries[i]);
+            gtu.push_back(i);
+
+        }else{
+            q_filtered.push_back(queries[i]);
+            gtf.push_back(i);
+        }
+    }
+
     // Remove filters from dataset (to calculate Euclidean distance in Filtered Greedy - vector 100 dimensions)
     vector<vector<float>> tempnodes = nodes;
     RemoveFilters(tempnodes);
 
     // Remove query_type form queries dataset (vector with 101 dimensions)
-    vector<vector<float>> tempqueries = queries;
-    RemoveFilters(tempqueries);
+    vector<vector<float>> f_tempqueries = q_filtered;
+    RemoveFilters(f_tempqueries);
+    vector<vector<float>> u_tempqueries = q_unfiltered;
+    RemoveFilters(u_tempqueries);
 
     // Remove filters from queries dataset (to calculate Euclidean distance in Filtered Greedy - vector 100 dimensions)
-    vector<vector<float>> q_vector = tempqueries;
-    RemoveFilters(q_vector);
+    vector<vector<float>> fq_vector = f_tempqueries;
+    RemoveFilters(fq_vector);
+    vector<vector<float>> uq_vector = u_tempqueries;
+    RemoveFilters(uq_vector);
 
+    float sum_filtered = 0.0;
+    float sum_unfiltered = 0.0;
     float sum = 0.0;
 
-    // For every query point in "Queries dataset"    
-    int queries_size = queries.size(); 
-    for(int i = 0; i < queries_size; i++){
+    // For every query in filtered queries
+    int f_size = q_filtered.size();
+    for(int i = 0; i < f_size; i++){
 
-        vector<float> query = q_vector[i];          // Query point
-        float query_filter = tempqueries[i][0];     // Filter of query
+        vector<float> query = fq_vector[i];           // Query point
+        float query_filter = f_tempqueries[i][0];     // Filter of query
 
         // Find k nearest neighbors for query using Filtered Greedy Search
         auto [neighbors_list, visited_nodes] = FilteredGreedySearch(STf,query,k,L,tempnodes,G,query_filter);
@@ -33,7 +59,7 @@ float Greedy_and_recall(vector<vector<float>> nodes, vector<vector<float>> queri
         // If query filter doesn't exist in dataset (move to next query)
         if (neighbors_list.empty()){
 
-            sum = sum + 1.0;
+            sum_filtered = sum_filtered + 1.0;
             cout << "Moving to next query." << endl;
             continue;
         }
@@ -45,17 +71,45 @@ float Greedy_and_recall(vector<vector<float>> nodes, vector<vector<float>> queri
         // If nearest neighbors are less than k, set k to n_size (for filtered queries mostly)
         if(n_size < k){
 
-            recall = Recall(neighbors_list, gt[i], n_size);
+            recall = Recall(neighbors_list, gt[gtf[i]], n_size);
 
         }else{
-            recall = Recall(neighbors_list, gt[i], k);
+            recall = Recall(neighbors_list, gt[gtf[i]], k);
         }
         
-        sum = sum + recall;
+        sum_filtered = sum_filtered + recall;
 
         cout << "Recall: " << static_cast<int>(recall * 100) << "%" << endl;
     }
 
+    cout << "Filtered Queries ";
+    OverallRecall(sum_filtered,f_size);
+    cout << endl;
+
+
+    // For every query in unfiltered queries  
+    int u_size = q_unfiltered.size(); 
+    for(int i = 0; i < u_size; i++){
+
+        vector<float> query = uq_vector[i];          // Query point
+        float query_filter = u_tempqueries[i][0];    // Filter of query
+
+        // Find k nearest neighbors for query using Filtered Greedy Search
+        auto [neighbors_list, visited_nodes] = FilteredGreedySearch(STf,query,k,L,tempnodes,G,query_filter);
+
+        // Calculate the recall (check for same neighbors between groundtruth vector and K-neighbors from Greedy)
+        float recall = 0.0;
+        recall = Recall(neighbors_list, gt[gtu[i]], k);
+        
+        sum_unfiltered = sum_unfiltered + recall;
+
+        cout << "Recall: " << static_cast<int>(recall * 100) << "%" << endl;
+    }
+
+    cout << "Unfiltered Queries ";
+    OverallRecall(sum_unfiltered,u_size);
+
+    sum = sum_filtered + sum_unfiltered;
     return sum;
 }
 
