@@ -62,7 +62,7 @@ run-all: run-groundtruth run-filtered run-stitched run-greedy ## Run all phases
 
 # Run greedy phase and save output
 save-greedy: $(MAIN_EXECUTABLE) ## Run greedy phase and save output (recall) to file
-	./$(MAIN_EXECUTABLE) greedy $(dataset) $(queries) $(groundtruth) $(L) $(k) >> output.txt
+	./$(MAIN_EXECUTABLE) greedy $(dataset) $(queries) $(groundtruth) $(L) $(k) $(graph) >> output.txt
 
 # Run each phase with Valgrind
 val-groundtruth: $(MAIN_EXECUTABLE) ## Run groundtruth phase under Valgrind
