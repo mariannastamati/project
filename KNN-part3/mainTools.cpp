@@ -91,8 +91,12 @@ void StitchedVamanaPhase(const string& source_path, float a, int L_small, int R_
 
     cout << "Running Stitched Vamana..." << endl;
     auto start = high_resolution_clock::now();
-    R_stitched = 5;
+
+    // Keep 5% of start nodes to add as neighbors in Stitched Vamana
+    int stf_size = STf.size();
+    R_stitched = static_cast<int>(round(stf_size * 0.05));  
     vector<graph> G_Stitched = StitchedVamana(nodes, a, L_small, R_small, R_stitched, STf);
+
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(end - start).count();
     cout << "Stitched Vamana Graph created in " << duration << " ms" << endl;

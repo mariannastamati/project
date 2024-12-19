@@ -83,6 +83,28 @@ vector <graph> FilteredVamana(vector<vector<float>> &nodes, float a, int L, int 
         }
     }
 
+    // For every start node add some extra neighbors (chosen from other start nodes)
+    int stf_size = STf.size();
+    int R_stitched = static_cast<int>(round(stf_size * 0.05));
+    for(int i = 0; i < stf_size; i++){
+
+        // Choose R_stitched random start nodes (except it self)
+        vector<int> randomNeighbors = choose_N_random_nodes(R_stitched, 0, stf_size-1, i);
+
+        int node = STf[i].start_node;
+        for (int j = 0; j < R_stitched; ++j){
+
+            int selected_neighbor = STf[randomNeighbors[j]].start_node;
+
+            float distance = 0.0;   // For Euclidean distance
+
+            // Calculate euclidean distance between the i node and the neighbor
+            distance = EuclideanDistance(nodes[node], nodes[selected_neighbor]);
+
+            // Add neighbor and distance
+            G[node].neighbors.emplace_back(selected_neighbor, distance);
+        }
+    }
     return G;
 }
 
