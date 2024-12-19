@@ -19,7 +19,6 @@ TEST_EXECUTABLE = test_executable
 dataset ?= ../datasets2/dummy-data.bin
 queries ?= ../datasets2/dummy-queries.bin
 a ?= 1.2
-t ?= 30
 L ?= 100
 R ?= 10
 k ?= 50
@@ -49,7 +48,7 @@ run-groundtruth: $(MAIN_EXECUTABLE) ## Run groundtruth phase
 	./$(MAIN_EXECUTABLE) groundtruth $(dataset) $(queries)
 
 run-filtered: $(MAIN_EXECUTABLE) ## Run filtered vamana phase
-	./$(MAIN_EXECUTABLE) filtered $(dataset) $(a) $(t) $(L) $(R)
+	./$(MAIN_EXECUTABLE) filtered $(dataset) $(a) $(L) $(R)
 
 run-stitched: $(MAIN_EXECUTABLE) ## Run stitched vamana phase
 	./$(MAIN_EXECUTABLE) stitched $(dataset) $(a) $(L_small) $(R_small) $(R_stitched)
@@ -69,7 +68,7 @@ val-groundtruth: $(MAIN_EXECUTABLE) ## Run groundtruth phase under Valgrind
 	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) groundtruth $(dataset) $(queries)
 
 val-filtered: $(MAIN_EXECUTABLE) ## Run filtered vamana phase under Valgrind
-	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) filtered $(dataset) $(a) $(t) $(L) $(R)
+	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) filtered $(dataset) $(a) $(L) $(R)
 
 val-stitched: $(MAIN_EXECUTABLE) ## Run stitched vamana phase under Valgrind
 	valgrind $(VALGRIND_ARGS) ./$(MAIN_EXECUTABLE) stitched $(dataset) $(a) $(L_small) $(R_small) $(R_stitched)

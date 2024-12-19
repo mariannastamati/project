@@ -25,11 +25,11 @@ int main(int argc, char **argv){
         GenerateGroundtruthPhase(argv[2], argv[3], num_data_dimensions, num_query_dimensions);
 
     }else if (phase == "filtered"){
-        if (argc != 7) {
-            cout << "Usage: filtered <data_path> <a> <t> <L> <R>" << endl;
+        if (argc != 6) {
+            cout << "Usage: filtered <data_path> <a> <L> <R>" << endl;
             return 1;
         }
-        FilteredVamanaPhase(argv[2], atof(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), num_data_dimensions);
+        FilteredVamanaPhase(argv[2], atof(argv[3]), atoi(argv[4]), atoi(argv[5]), num_data_dimensions);
 
     }else if (phase == "stitched"){
         if (argc != 7) {

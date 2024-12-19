@@ -30,7 +30,7 @@ struct Map{
 
 
 // Function to find medoid (the start node) of every filter. Returns a map with filters and their start nodes
-vector<Map> FindMedoid(vector<vector<float>> &nodes, int threshold);
+vector<Map> FindMedoid(vector<vector<float>> &nodes);
 
 // Function to find a start node from given filter
 int findStartNodeFromFilter(vector<Map> STf, float filter);

@@ -1,7 +1,7 @@
 #include "medoid.h"
 
 
-vector<Map> FindMedoid(vector<vector<float>> &nodes, int threshold){
+vector<Map> FindMedoid(vector<vector<float>> &nodes){
 
     // Initialize M be an empty map
     vector<Map> M;

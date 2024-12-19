@@ -302,42 +302,6 @@ void findStartNodeFromFilter_2(){
 }
 
 
-// ------------ RAND POINTS FUNCTION (IN MEDOID) ------------
-void RandomPoints_1(){
-
-    vector<int> points = {
-        {56},
-        {4},
-        {300},
-        {2},
-        {1},
-        {90},
-        {12}
-    };
-
-    int threshold = 3;
-    cout << endl << "Threshold: " << threshold << endl;
-
-    cout << "Points in vector: " << endl; 
-    for(size_t i = 0; i < points.size(); i ++){
-        
-        cout << points[i] << " ";
-    }
-
-    // Choose 3 random points from vector
-    vector<int> rand_points = randompoints(points,threshold);
-
-    cout << endl << endl << threshold << " random points choosen from vector:" << endl;
-    for(size_t i = 0; i < rand_points.size(); i ++){
-        
-        cout << rand_points[i] << " ";
-    }
-
-    // Random points must be 3 in size
-    TEST_ASSERT(rand_points.size() == (long unsigned int) 3);  
-}
-
-
 // ------------ FIND MEDOID ALGORITHM ------------
 void FindMedoid_1(){
 
@@ -354,10 +318,8 @@ void FindMedoid_1(){
         {34.0, 1.3, 3.0, 4.0, 5.0, 6.0, 7.0}
     };
 
-    int threshold = 3;
-
     // Create a start node map 
-    vector<Map> STf = FindMedoid(nodes, threshold);
+    vector<Map> STf = FindMedoid(nodes);
 
     cout << endl << "We have 3 different filters in dataset" << endl;
     cout << "Map of start nodes for every filter" << endl;
@@ -755,31 +717,29 @@ void FilteredVamana_1(){
 
     float a = 1.2;
     int L = 10;
-    int R = 5;
-    int t = 3;
+    int R = 4;
 
-    vector<Map> STf = {
-        {1.0, 2},
-        {2.0, 9}
-    };
+    vector<Map> STf;
 
-   vector <graph> G_Filtered = FilteredVamana(data,a,L,R,t,STf);
+    vector <graph> G_Filtered = FilteredVamana(data,a,L,R,STf);
 
-    cout << endl << " Max out-neighbors for every node must be <= 5" << endl;
+    cout << endl << "Max out-neighbors for every node must be <= 4, except start nodes may have extra neighbors (R + r_random)." << endl;
     PrintGraph(G_Filtered);
 
     // Check the size of neighbors in every node
     bool flag = 0;
+    int node = -1;
     for(size_t i = 0; i < G_Filtered.size(); i++){
 
         int ns = G_Filtered[i].neighbors.size();
         if(ns > R){
             flag = 1;
+            node = i;
         }
     }
 
-    // Max out-neighbors for every node must be <= R_stitched
-    TEST_ASSERT(flag == 0); 
+    // Max out-neighbors for every node must be <= R (except start nodes neighbors)
+    TEST_ASSERT((flag == 1) && ((node == 9) || (node == 2))); 
 }
 
 
@@ -830,7 +790,7 @@ void StitchedVamana_1(){
     }
 
     // Max out-neighbors for every node must be <= R_stitched (except start nodes neighbors)
-    TEST_ASSERT((flag == 1) && ((node == 9) || (node == 2) || (node ==-1))); 
+    TEST_ASSERT((flag == 1) && ((node == 9) || (node == 2))); 
 }
 
 
@@ -869,9 +829,6 @@ TEST_LIST = {
     // Find Start Node from Filter Tests
     {"Find Start Node from Filter (test 1)", findStartNodeFromFilter_1},
     {"Find Start Node from Filter (test 2)", findStartNodeFromFilter_2},
-
-    // Random Points in medoid funtion Tests
-    {"Random Points (in medoid, using threshold)", RandomPoints_1},
 
     // Find Medoid Tests
     {"Find Medoid", FindMedoid_1},

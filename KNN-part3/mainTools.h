@@ -25,7 +25,7 @@ void GenerateGroundtruthPhase(const string& source_path, const string& query_pat
 uint32_t num_data_dimensions, uint32_t num_query_dimensions);
 
 // Filtered Vamana Phase
-void FilteredVamanaPhase(const string& source_path, float a, int t, int L, int R, uint32_t num_data_dimensions); 
+void FilteredVamanaPhase(const string& source_path, float a, int L, int R, uint32_t num_data_dimensions); 
 
 // Stitched Vamana Phase
 void StitchedVamanaPhase(const string& source_path, float a, int L_small, int R_small, int R_stitched, 
