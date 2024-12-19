@@ -21,7 +21,7 @@ double EuclideanDistance(const vector<float>& node1, const vector<float>& node2)
 } 
 
 
-static vector<int> choose_N_random_nodes(int N, int start, int finish, int self){
+vector<int> choose_N_random_nodes(int N, int start, int finish, int self){
 
     int i;
     vector<int> choosableNodes;

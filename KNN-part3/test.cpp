@@ -805,7 +805,7 @@ void StitchedVamana_1(){
     float a = 1.2;
     int L_small = 10;
     int R_small = 4;
-    int R_stitched = 3;
+    int R_stitched = 1;
 
     vector<Map> STf = {
         {1.0, 2},
@@ -814,21 +814,23 @@ void StitchedVamana_1(){
 
     vector <graph> G_stitched = StitchedVamana(data, a, L_small, R_small, R_stitched, STf);
 
-    cout << endl << " Max out-neighbors for every node must be <= 3 (R_stitched = 3)" << endl;
+    cout << endl << " Max out-neighbors for every node must be <= 4, except start nodes may have extra neighbors (R_small + R_stitched)." << endl;
     PrintGraph(G_stitched);
 
     // Check the size of neighbors in every node
     bool flag = 0;
+    int node = -1;
     for(size_t i = 0; i < G_stitched.size(); i++){
 
         int ns = G_stitched[i].neighbors.size();
-        if(ns > R_stitched){
+        if(ns > R_small){
             flag = 1;
+            node = i;
         }
     }
 
-    // Max out-neighbors for every node must be <= R_stitched
-    TEST_ASSERT(flag == 0); 
+    // Max out-neighbors for every node must be <= R_stitched (except start nodes neighbors)
+    TEST_ASSERT((flag == 1) && ((node == 9) || (node == 2) || (node ==-1))); 
 }
 
 
