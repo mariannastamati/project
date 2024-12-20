@@ -141,20 +141,27 @@ vector <graph> StitchedVamana(vector<vector<float>> &nodes, float a, int L_small
         }
     }
 
-    // For every node in Graph G, call FilteredRobustPrune to reduce max out-degrees to R_stitched
-    int V = G.size();
-    for(int v = 0; v < V; v++){
 
-        vector<edge> neighbors = G[v].neighbors;
-        int ns = neighbors.size();
-        vector<int> n_out;
-        for(int i = 0; i < ns; i++){
+    // For every start node add some extra neighbors (chosen from other start nodes)
+    int stf_size = STf.size();
+    for(int i = 0; i < stf_size; i++){
 
-            n_out.push_back(neighbors[i].first);
+        // Choose R_stitched random start nodes (except it self)
+        vector<int> randomNeighbors = choose_N_random_nodes(R_stitched, 0, stf_size-1, i);
+
+        int node = STf[i].start_node;
+        for (int j = 0; j < R_stitched; ++j){
+
+            int selected_neighbor = STf[randomNeighbors[j]].start_node;
+
+            float distance = 0.0;   // For Euclidean distance
+
+            // Calculate euclidean distance between the i node and the neighbor
+            distance = EuclideanDistance(nodes[node], nodes[selected_neighbor]);
+
+            // Add neighbor and distance
+            G[node].neighbors.emplace_back(selected_neighbor, distance);
         }
-
-        // Call FilteredRobustPrune for node v
-        G = FilteredRobustPrune(v, n_out, a, R_stitched, G, nodes);
     }
 
     return G;

@@ -17,4 +17,7 @@ void PrintMedoidMap(vector<Map> &M);
 // Function to print graph G (Graph created from Filtered or Stitched Vamana)
 void PrintGraph(const vector<graph> &G);
 
+// Function to print phases of main program
+void PrintPhases();
+
 #endif

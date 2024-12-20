@@ -33,11 +33,10 @@ void GenerateGroundtruthPhase(const string& source_path, const string& query_pat
 
 
 // Filtered Vamana Phase
-void FilteredVamanaPhase(const string& source_path, float a, int t, int L, int R, uint32_t num_data_dimensions){
+void FilteredVamanaPhase(const string& source_path, float a,int L, int R, uint32_t num_data_dimensions){
 
     // Print arguments
     cout << "Prune threshold a: " << a << endl;
-    cout << "Medoid threshold t: " << t << endl;
     cout << "Search list size L: " << L << endl;
     cout << "Max out-degree R: " << R << endl << endl;
 
@@ -55,10 +54,13 @@ void FilteredVamanaPhase(const string& source_path, float a, int t, int L, int R
 
     cout << "Running Filtered Vamana..." << endl;
     auto start = high_resolution_clock::now();
-    vector<graph> G_Filtered = FilteredVamana(nodes, a, L, R, t, STf);
+    vector<graph> G_Filtered = FilteredVamana(nodes, a, L, R, STf);
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(end - start).count();
     cout << "Filtered Vamana Graph created in " << duration << " ms" << endl;
+
+    // Save graph to file.bin
+    saveGraphToFile(G_Filtered, "G_filtered.bin");
 }
 
 
@@ -81,23 +83,35 @@ void StitchedVamanaPhase(const string& source_path, float a, int L_small, int R_
     // CLEAN DATA: Remove Timestamps from data
     CleanData(nodes);
 
-    // Medoid map
-    vector<Map> STf;
     // Find start node (medoid of cluster) for every filter f
-    //STf = FindMedoid(nodes,threshold);
+    vector<Map> STf = FindMedoid(nodes);
 
     cout << "Running Stitched Vamana..." << endl;
     auto start = high_resolution_clock::now();
+
+    // Keep 5% of start nodes to add as neighbors in Stitched Vamana
+    int stf_size = STf.size();
+    R_stitched = static_cast<int>(round(stf_size * 0.05));
+    
+    // This only helps if we have few filters (filters < 20)
+    if((R_stitched > 0) && (R_stitched < 1)){
+        R_stitched = 1;
+    } 
+
     vector<graph> G_Stitched = StitchedVamana(nodes, a, L_small, R_small, R_stitched, STf);
+
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(end - start).count();
     cout << "Stitched Vamana Graph created in " << duration << " ms" << endl;
+
+    // Save graph to file.bin
+    saveGraphToFile(G_Stitched, "G_stitched.bin");
 }
 
 
 // Greedy Search and Recall Phase
 void GreedySearchPhase(const string& source_path, const string& query_path, const string& groundtruth_path, 
-    int L, int k, uint32_t num_data_dimensions, uint32_t num_query_dimensions){
+    int L, int k, uint32_t num_data_dimensions, uint32_t num_query_dimensions, const string& filename){
 
     // Print arguments
     cout << "Search list size L: " << L << endl;
@@ -126,13 +140,14 @@ void GreedySearchPhase(const string& source_path, const string& query_path, cons
     vector<vector<int>> gt = readGroundtruth(groundtruth_path);
     cout << endl;
 
-    // Medoid map
-    vector<Map> STf;
+    // Read graph index
+    vector<graph> Graph = ReadGraphFile(filename);
+
     // Find start node (medoid of cluster) for every filter f
-    //STf = FindMedoid(nodes,threshold);
+    vector<Map> STf = FindMedoid(nodes); 
 
     cout << "Find k nearest neighbors for queries (using Greedy Search)..." << endl;
-    float sum = Greedy_and_recall(nodes, queries, gt, {}, STf, k, L);
+    float sum = Greedy_and_recall(nodes, queries, gt, Graph, STf, k, L);
 
     OverallRecall(sum, queries.size());
 }
