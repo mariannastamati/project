@@ -94,7 +94,7 @@ void StitchedVamanaPhase(const string& source_path, float a, int L_small, int R_
     R_stitched = static_cast<int>(round(stf_size * 0.05));
     
     // This only helps if we have few filters (filters < 20)
-    if((R_stitched > 0) && (R_stitched < 1)){
+    if(R_stitched == 0){
         R_stitched = 1;
     } 
 
