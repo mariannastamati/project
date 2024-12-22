@@ -1,6 +1,24 @@
 #include "medoid.h"
 
 
+vector<int> choose_random_nodes(int N, int start, int finish){
+
+    int i;
+    vector<int> choosableNodes;
+
+    for(i = start; i <= finish; i++)
+    {
+        choosableNodes.push_back(i);
+    }
+
+    random_device rd;
+    mt19937 gen(rd());
+    shuffle(choosableNodes.begin(), choosableNodes.end(), gen);
+
+    return vector<int>(choosableNodes.begin(), choosableNodes.begin() + N);
+}
+
+
 vector<Map> FindMedoid(vector<vector<float>> &nodes){
 
     // Initialize M be an empty map
@@ -40,8 +58,14 @@ vector<Map> FindMedoid(vector<vector<float>> &nodes){
         }
     }
 
+
+    // Remove filters for Euclidean distane in Medoid calculation
+    vector<vector<float>> tempnodes = nodes;
+    RemoveFilters(tempnodes);
+
     // For every filter find start node (medoid)
     size = Pf.size();
+
     for(int i = 0; i < size; i++){
 
         int pf_size = Pf[i].matching_points.size();
@@ -55,16 +79,27 @@ vector<Map> FindMedoid(vector<vector<float>> &nodes){
             continue;
         }
 
-        // Remove filters for Euclidean distane in Medoid calculation
-        vector<vector<float>> tempnodes = nodes;
-        RemoveFilters(tempnodes);
-
         // Save vector for every node in filter
         vector<vector<float>> pf_vector;
-        for(int j = 0; j < pf_size; j++){
+        int N = 30000;
+        if(pf_size <= N){
+            
+            for(int j = 0; j < pf_size; j++){
 
-            int node = Pf[i].matching_points[j];
-            pf_vector.push_back(tempnodes[node]);
+                int node = Pf[i].matching_points[j];
+                pf_vector.push_back(tempnodes[node]);
+            }
+
+        }else{
+            // Choose sample nodes if dataset is too big
+            vector<int> random_nodes = choose_random_nodes(N, 0, pf_size-1);
+            int r_nodes_size = random_nodes.size();
+
+            for(int j = 0; j < r_nodes_size; j++){
+                int r_node = random_nodes[j];
+                int node = Pf[i].matching_points[r_node];
+                pf_vector.push_back(tempnodes[node]);
+            }
         }
 
         // Call function to find real medoid of cluster
@@ -103,23 +138,29 @@ int Medoid(const vector<vector<float>>& data){
 
     // Calculate the sum of Euclidean distance for every node of the graph with the other nodes
     int size = data.size();
-    for (int i=0; i < size; i++){
-        
-        double sum = 0.0;
+    int i, j;
+    float sum;
 
-        for(int j=0; j < size; j++){
-            if(i != j){   // If the nodes are not the same, calculate Euclidean distance
-                
-                sum = sum + EuclideanDistance(data[i],data[j]);
+#pragma omp parallel for private(j,i,sum)
+    for (i=0; i < size; i++){
+        
+        sum = 0.0;
+
+        for(j=0; j < size; j++){
+            if(i != j) {   // If the nodes are not the same, calculate Euclidean distance
+                sum += EuclideanDistance(data[i],data[j]);
             }
         }
 
+#pragma omp critical
+{
         // Check if a smaller sum is found and keep the new medoid of graph
         if(sum < minsum){
 
             minsum = sum;
             medoid = i;          // "i" node is the medoid
         }
+}
     }
     return medoid;
 }

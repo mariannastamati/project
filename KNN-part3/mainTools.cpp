@@ -26,9 +26,9 @@ void GenerateGroundtruthPhase(const string& source_path, const string& query_pat
     auto start = high_resolution_clock::now();
     generateGroundTruth(queries, nodes, 100);
     auto end = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>(end - start).count();
+    auto duration = duration_cast<seconds>(end - start).count();
 
-    cout << "Groundtruth file created in " << duration << " ms" << endl;
+    cout << "Groundtruth file created in " << duration << " sec." << endl;
 }
 
 
@@ -56,8 +56,8 @@ void FilteredVamanaPhase(const string& source_path, float a,int L, int R, uint32
     auto start = high_resolution_clock::now();
     vector<graph> G_Filtered = FilteredVamana(nodes, a, L, R, STf);
     auto end = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>(end - start).count();
-    cout << "Filtered Vamana Graph created in " << duration << " ms" << endl;
+    auto duration = duration_cast<seconds>(end - start).count();
+    cout << "Filtered Vamana Graph created in " << duration << " sec." << endl;
 
     // Save graph to file.bin
     saveGraphToFile(G_Filtered, "G_filtered.bin");
@@ -101,8 +101,8 @@ void StitchedVamanaPhase(const string& source_path, float a, int L_small, int R_
     vector<graph> G_Stitched = StitchedVamana(nodes, a, L_small, R_small, R_stitched, STf);
 
     auto end = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>(end - start).count();
-    cout << "Stitched Vamana Graph created in " << duration << " ms" << endl;
+    auto duration = duration_cast<seconds>(end - start).count();
+    cout << "Stitched Vamana Graph created in " << duration << " sec." << endl;
 
     // Save graph to file.bin
     saveGraphToFile(G_Stitched, "G_stitched.bin");
@@ -147,7 +147,11 @@ void GreedySearchPhase(const string& source_path, const string& query_path, cons
     vector<Map> STf = FindMedoid(nodes); 
 
     cout << "Find k nearest neighbors for queries (using Greedy Search)..." << endl;
+    auto start = high_resolution_clock::now();
     float sum = Greedy_and_recall(nodes, queries, gt, Graph, STf, k, L);
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<seconds>(end - start).count();
+    cout << "k Nearest Neighbors found in " << duration << " sec." << endl;
 
     OverallRecall(sum, queries.size());
 }

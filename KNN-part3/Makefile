@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -g3 -O3 -Wall -std=c++17
+CXXFLAGS = -g3 -O3 -Wall -std=c++17 -march=native -fopenmp
 
 # Source files
 SRCS = $(wildcard *.cpp)
@@ -22,7 +22,7 @@ a ?= 1.2
 L ?= 100
 R ?= 10
 k ?= 50
-L_small ?= 80
+L_small ?= 100
 R_small ?= 13
 R_stitched ?= 10
 groundtruth ?= groundtruth.txt
