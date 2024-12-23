@@ -70,22 +70,40 @@ vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, in
     // Create adjacency list
     vector<vector<edge>> Graph(size);
 
-    // For every node of the graph connect R random neighbors
-    for (int i = 0; i < size; ++i){
+    if (size >= 30000){
 
-        vector<int> randomNeighbors = choose_N_random_nodes(R, 0, size-1, i);
+        // Multithreading for big datasets
+        #pragma omp parallel for
+        for (int i = 0; i < size; ++i){
+            vector<int> randomNeighbors = choose_N_random_nodes(R, 0, size - 1, i);
+            vector<edge> local_edges;
 
-        for (int j = 0; j < R; ++j){
+            for (int j = 0; j < R; ++j){
+                float distance = EuclideanDistance(data[i], data[randomNeighbors[j]]);
+                local_edges.emplace_back(randomNeighbors[j], distance);
+            }
 
-            float distance = 0.0;   // For Euclidean distance
+            Graph[i] = move(local_edges);
+        }
 
-            // Calculate euclidean distance between the i node and the neighbor
-            distance = EuclideanDistance(data[i], data[randomNeighbors[j]]);
+    }else{ 
 
-            // Add neighbor and distance
-            Graph[i].emplace_back(randomNeighbors[j], distance);
+        // For every node of the graph connect R random neighbors
+        for (int i = 0; i < size; ++i){
+
+            vector<int> randomNeighbors = choose_N_random_nodes(R, 0, size-1, i);
+
+            for (int j = 0; j < R; ++j){
+
+                float distance = 0.0;   // For Euclidean distance
+
+                // Calculate euclidean distance between the i node and the neighbor
+                distance = EuclideanDistance(data[i], data[randomNeighbors[j]]);
+
+                // Add neighbor and distance
+                Graph[i].emplace_back(randomNeighbors[j], distance);
+            }
         }
     }
-
     return Graph;
 }
