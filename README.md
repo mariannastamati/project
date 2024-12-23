@@ -67,7 +67,8 @@ To run all phases under Valgrind: ```make val-all```
 To run with Test Main: ```make run-test```  
 To run with Test Main under Valgrind:  ```make val-test``` 
 
-To clean all: ```make clean``` (cleans all - including main.o and test.o)
+To clean all: ```make clean``` (cleans all files - including main.o and test.o)  
+To view available commands: ```make help```
 
 * For **custom arguments** use the same commands as above, just add the new value to the argument you want to change.    
 e.g. ```make run-filtered t=20 a=1.1```   

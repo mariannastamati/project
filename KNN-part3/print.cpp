@@ -41,3 +41,14 @@ void PrintGraph(const vector<graph> &G){
         cout <<endl;
     }
 }
+
+
+// Function to print phases of main program
+void PrintPhases(){
+
+    cout << "Available phases and arguments:" << endl;
+    cout << "       groundtruth <data_path> <query_path> <groundtruth_path>" << endl;
+    cout << "       filtered <data_path> <a> <L> <R>" << endl;
+    cout << "       stitched <data_path> <a> <L_small> <R_small> <R_stitched>" << endl;
+    cout << "       greedy <data_path> <query_path> <groundtruth_path> <L> <k> <Graph.bin_path>" << endl;
+}

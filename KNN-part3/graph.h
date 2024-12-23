@@ -34,4 +34,7 @@ double EuclideanDistance(const vector<float>& node1, const vector<float>& node2)
 // Creates a random R-regular directed graph (FOR VAMANA IN STITCHED VAMANA)
 vector<vector<edge>> CreateGraph(const vector<vector<float>>& data, int size, int R);
 
+// Choose N random nodes except it self
+vector<int> choose_N_random_nodes(int N, int start, int finish, int self);
+
 #endif
