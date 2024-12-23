@@ -2,16 +2,16 @@
 
 
 vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, float a, int L, int R, int& s){ 
-
+    cout <<"mphke" <<endl;
     // Create and initialize a random R-regular directed graph
     vector<vector<edge>> Graph = CreateGraph(data, data.size(), R);
-
+    cout <<"eftiakse tin malakia tou" <<endl;
     // Sigma (σ) is a random permutation of points 1..n (data size = n = the points in the dataset)
     vector<int> sigma = random_permutation1(data);
 
     int size = data.size();
     for(int i = 0; i < size; i++){
-
+        
         // Call Greedy Search giving arguments: x_0σ(i), s = medoid, k = 1 and L
         auto [K_neighbors, visited_nodes] = GreedySearch(s, data[sigma[i]], 1, L, data, Graph);
         
@@ -23,6 +23,7 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, float a, 
         // For every Neighbor j of sigma[i]
         vector<edge> nb = Graph[sigma[i]];
         int Vsize = nb.size();
+        #pragma omp parallel for
         for(int j = 0; j < Vsize; j++){
 
             int NearNeighbor = nb[j].first;
@@ -57,15 +58,21 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, float a, 
                     neighbors.push_back(sigma[i]);
                 }
             
-                // Call Robust Prune to update out-neighbors of NearNeighbor (V[j])
-                Graph = RobustPrune(NearNeighbor, neighbors, a, R, Graph, data);
+                #pragma omp critical
+                {
+                    // Call Robust Prune to update out-neighbors of NearNeighbor (V[j])
+                    Graph = RobustPrune(NearNeighbor, neighbors, a, R, Graph, data);
+                }
 
             }else{
                 // Else (if it doesn't already exists) add sigma[i] in the neighbors of NearNeighbor (V[j]) without pruning
                 if(exists == false){
 
                     float distance = EuclideanDistance(data[NearNeighbor],data[sigma[i]]);
-                    Graph[NearNeighbor].emplace_back(sigma[i], distance);
+                    #pragma omp critical
+                    {
+                        Graph[NearNeighbor].emplace_back(sigma[i], distance);
+                    }
                 } 
             }
         }

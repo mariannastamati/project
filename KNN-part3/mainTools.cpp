@@ -151,7 +151,7 @@ void GreedySearchPhase(const string& source_path, const string& query_path, cons
     float sum = Greedy_and_recall(nodes, queries, gt, Graph, STf, k, L);
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<seconds>(end - start).count();
-    cout << "k Nearest Neighbors found in " << duration << " sec." << endl;
+    cout << "k Nearest Neighbors found in " << duration << " sec." << endl << endl;
 
     OverallRecall(sum, queries.size());
 }
