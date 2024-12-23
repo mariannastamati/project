@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -g3 -O3 -Wall -std=c++17
+CXXFLAGS = -g3 -O3 -Wall -std=c++17 -march=native -fopenmp
 
 # Source files
 SRCS = $(wildcard *.cpp)
@@ -19,10 +19,10 @@ TEST_EXECUTABLE = test_executable
 dataset ?= ../datasets2/dummy-data.bin
 queries ?= ../datasets2/dummy-queries.bin
 a ?= 1.2
-L ?= 100
+L ?= 150
 R ?= 10
 k ?= 50
-L_small ?= 80
+L_small ?= 150
 R_small ?= 13
 R_stitched ?= 10
 groundtruth ?= groundtruth.txt
