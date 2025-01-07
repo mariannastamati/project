@@ -2,10 +2,10 @@
 
 
 vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, float a, int L, int R, int& s){ 
-    cout <<"mphke" <<endl;
+
     // Create and initialize a random R-regular directed graph
     vector<vector<edge>> Graph = CreateGraph(data, data.size(), R);
-    cout <<"eftiakse tin malakia tou" <<endl;
+
     // Sigma (σ) is a random permutation of points 1..n (data size = n = the points in the dataset)
     vector<int> sigma = random_permutation1(data);
 
