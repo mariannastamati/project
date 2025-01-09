@@ -17,7 +17,11 @@ float Greedy_and_recall(vector<vector<float>> nodes, vector<vector<float>> queri
     vector<vector<float>> q_vector = tempqueries;
     RemoveFilters(q_vector);
 
+    float sum_filtered = 0.0;
+    float sum_unfiltered = 0.0;
     float sum = 0.0;
+    int f = 0;
+    int uf = 0;
 
     // For every query point in "Queries dataset"    
     int queries_size = queries.size(); 
@@ -53,8 +57,21 @@ float Greedy_and_recall(vector<vector<float>> nodes, vector<vector<float>> queri
         
         sum = sum + recall;
 
-        cout << "Recall: " << static_cast<int>(recall * 100) << "%" << endl;
+        if(query_filter == -1){
+            sum_unfiltered = sum_unfiltered + recall;
+            uf++;
+        }else{
+            sum_filtered = sum_filtered + recall;
+            f++;
+        }
     }
+
+    cout << "Filtered Queries ";
+    OverallRecall(sum_filtered,f);
+    cout << endl;
+
+    cout << "Unfiltered Queries ";
+    OverallRecall(sum_unfiltered,uf);
 
     return sum;
 }

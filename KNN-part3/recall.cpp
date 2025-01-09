@@ -78,8 +78,6 @@ float Greedy_and_recall(vector<vector<float>> nodes, vector<vector<float>> queri
         }
         
         sum_filtered = sum_filtered + recall;
-
-        cout << "Recall: " << static_cast<int>(recall * 100) << "%" << endl;
     }
 
     cout << "Filtered Queries ";
@@ -102,8 +100,6 @@ float Greedy_and_recall(vector<vector<float>> nodes, vector<vector<float>> queri
         recall = Recall(neighbors_list, gt[gtu[i]], k);
         
         sum_unfiltered = sum_unfiltered + recall;
-
-        cout << "Recall: " << static_cast<int>(recall * 100) << "%" << endl;
     }
 
     cout << "Unfiltered Queries ";
