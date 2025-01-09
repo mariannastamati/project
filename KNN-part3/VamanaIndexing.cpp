@@ -23,7 +23,6 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, float a, 
         // For every Neighbor j of sigma[i]
         vector<edge> nb = Graph[sigma[i]];
         int Vsize = nb.size();
-        #pragma omp parallel for
         for(int j = 0; j < Vsize; j++){
 
             int NearNeighbor = nb[j].first;
@@ -58,7 +57,6 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, float a, 
                     neighbors.push_back(sigma[i]);
                 }
             
-                #pragma omp critical
                 {
                     // Call Robust Prune to update out-neighbors of NearNeighbor (V[j])
                     Graph = RobustPrune(NearNeighbor, neighbors, a, R, Graph, data);
@@ -69,7 +67,6 @@ vector<vector<edge>> VamanaIndexing(const vector<vector<float>>& data, float a, 
                 if(exists == false){
 
                     float distance = EuclideanDistance(data[NearNeighbor],data[sigma[i]]);
-                    #pragma omp critical
                     {
                         Graph[NearNeighbor].emplace_back(sigma[i], distance);
                     }
